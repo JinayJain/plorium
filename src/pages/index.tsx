@@ -1,3 +1,4 @@
+import { AddIcon, SmallAddIcon } from "@chakra-ui/icons";
 import {
   Box,
   BoxProps,
@@ -7,6 +8,11 @@ import {
   Heading,
   Stack,
   Text,
+  Button,
+  AvatarGroup,
+  Avatar,
+  Center,
+  HStack,
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
 
@@ -40,9 +46,24 @@ const Header = ({ title }: { title: string }) => (
   </Flex>
 );
 
-const Sidebar = ({ title, ...props }: { title: string } & BoxProps) => (
-  <Box textAlign="right" {...props}>
-    <Heading size="md">{title}</Heading>
+const Sidebar = ({
+  title,
+  author,
+  description,
+  ...props
+}: { title: string; author: string; description: string } & BoxProps) => (
+  <Box {...props}>
+    <Stack textAlign="right" align="flex-end" gap={2}>
+      <Heading size="md">{title}</Heading>
+      <HStack>
+        <Avatar size="sm" name={author} />
+        <Heading size="sm">{author}</Heading>
+      </HStack>
+      <Text fontSize="lg">{description}</Text>
+    </Stack>
+    <Button colorScheme="green" w="full" mt={12} leftIcon={<SmallAddIcon />}>
+      Join
+    </Button>
   </Box>
 );
 
@@ -61,21 +82,23 @@ const Block = ({
   title: string;
   description: string;
 }) => (
-  <Box
-    border="1px"
-    borderColor="gray"
-    shadow="md"
-    px={4}
-    py={6}
-    borderRadius={8}
-  >
+  <Box border="1px" borderColor="gray" shadow="md" px={4} py={6} rounded="lg">
     <Heading size="md">{title}</Heading>
     <Text>{description}</Text>
   </Box>
 );
 
+const BlockLine = ({ height }: { height: number }) => (
+  <Center>
+    <Box h={height} borderLeft="8px" borderColor="gray.200" />
+  </Center>
+);
+
 const Home: NextPage = () => {
   const title = "Beginner's Guide to Artificial Intelligence";
+  const description =
+    "A comprehensive guide to the world of artificial intelligence, with a focus on machine learning and deep learning.";
+  const author = "Jinay Jain";
 
   return (
     <Grid
@@ -86,9 +109,11 @@ const Home: NextPage = () => {
       <GridItem as={Flex} justify="flex-end" rowStart={2}>
         <Sidebar
           title={title}
+          description={description}
+          author={author}
           maxW="200px"
           position="sticky"
-          top={4}
+          top={8}
           alignSelf="flex-start"
         />
       </GridItem>
@@ -96,8 +121,8 @@ const Home: NextPage = () => {
         <Header title={title} />
       </GridItem>
       <GridItem colStart={2} rowStart={2}>
-        <Stack gap={2}>
-          {[...Array(1)]
+        <Stack divider={<BlockLine height={6} />}>
+          {[...Array(9)]
             .map(() =>
               RESOURCES.map((resource, index) => (
                 <Block key={index} {...resource} />
@@ -111,7 +136,7 @@ const Home: NextPage = () => {
         colStart={3}
         alignSelf="flex-start"
         position="sticky"
-        top={4}
+        top={8}
       >
         <Heading size="sm" color="gray.400" mb={2}>
           ROADMAP
