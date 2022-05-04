@@ -56,12 +56,11 @@ const Sidebar = ({
     <Stack textAlign="right" align="flex-end" gap={2}>
       <Heading size="md">{title}</Heading>
       <HStack>
-        <Avatar size="sm" name={author} />
         <Heading size="sm">{author}</Heading>
       </HStack>
       <Text fontSize="lg">{description}</Text>
     </Stack>
-    <Button colorScheme="orange" w="full" mt={12} leftIcon={<SmallAddIcon />}>
+    <Button colorScheme="teal" w="full" mt={12} leftIcon={<SmallAddIcon />}>
       Join
     </Button>
   </Box>
@@ -82,22 +81,17 @@ const Block = ({
   title: string;
   description: string;
 }) => (
-  <Box
-    border="1px"
-    borderColor="gray.100"
-    shadow="md"
-    px={4}
-    py={6}
-    rounded="lg"
-  >
-    <Heading size="md">{title}</Heading>
+  <Box bg="green.50" shadow="md" px={4} py={6} rounded="lg">
+    <Heading size="md" color="green.800" mb={1}>
+      {title}
+    </Heading>
     <Text>{description}</Text>
   </Box>
 );
 
 const BlockLine = ({ height }: { height: number }) => (
   <Center>
-    <Box h={height} borderLeft="6px solid" borderColor="green.100" />
+    <Box h={height} borderLeft="0px solid" borderColor="green.300" />
   </Center>
 );
 
