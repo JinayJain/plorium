@@ -39,7 +39,7 @@ const filler =
 
 const Header = ({ title }: { title: string }) => (
   <Flex flex={1} textAlign="center" gap={2} flexDir="column">
-    <Heading color="gray.400" fontWeight="normal" size="md">
+    <Heading color="green.700" fontWeight="normal" size="md">
       5 Days &middot; 21 Resources &middot; Beginner
     </Heading>
     <Heading size="xl">{title}</Heading>
@@ -61,7 +61,7 @@ const Sidebar = ({
       </HStack>
       <Text fontSize="lg">{description}</Text>
     </Stack>
-    <Button colorScheme="green" w="full" mt={12} leftIcon={<SmallAddIcon />}>
+    <Button colorScheme="orange" w="full" mt={12} leftIcon={<SmallAddIcon />}>
       Join
     </Button>
   </Box>
@@ -82,7 +82,14 @@ const Block = ({
   title: string;
   description: string;
 }) => (
-  <Box border="1px" borderColor="gray" shadow="md" px={4} py={6} rounded="lg">
+  <Box
+    border="1px"
+    borderColor="gray.100"
+    shadow="md"
+    px={4}
+    py={6}
+    rounded="lg"
+  >
     <Heading size="md">{title}</Heading>
     <Text>{description}</Text>
   </Box>
@@ -90,7 +97,7 @@ const Block = ({
 
 const BlockLine = ({ height }: { height: number }) => (
   <Center>
-    <Box h={height} borderLeft="8px" borderColor="gray.200" />
+    <Box h={height} borderLeft="6px solid" borderColor="green.100" />
   </Center>
 );
 
@@ -138,7 +145,7 @@ const Home: NextPage = () => {
         position="sticky"
         top={8}
       >
-        <Heading size="sm" color="gray.400" mb={2}>
+        <Heading size="sm" color="green.700" mb={2}>
           ROADMAP
         </Heading>
         <ProgressNav />
