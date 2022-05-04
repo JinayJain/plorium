@@ -22,7 +22,25 @@ const Fonts = () => (
           font-display: swap;
           font-style: italic;
       }
+      @font-face {
+      font-family: 'Switzer-Variable';
+      src: url('../fonts/Switzer-Variable.woff2') format('woff2'),
+          url('../fonts/Switzer-Variable.woff') format('woff'),
+          url('../fonts/Switzer-Variable.ttf') format('truetype');
+          font-weight: 300 900;
+          font-display: swap;
+          font-style: normal;
+      }
 
+      @font-face {
+      font-family: 'Switzer-VariableItalic';
+      src: url('../fonts/Switzer-VariableItalic.woff2') format('woff2'),
+          url('../fonts/Switzer-VariableItalic.woff') format('woff'),
+          url('../fonts/Switzer-VariableItalic.ttf') format('truetype');
+          font-weight: 300 900;
+          font-display: swap;
+          font-style: italic;
+      }
       `}
   />
 );
