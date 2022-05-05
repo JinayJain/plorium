@@ -1,3 +1,6 @@
+import Block, { BlockProps } from "../../components/roadmap/Block";
+import Sidebar from "../../components/roadmap/Sidebar";
+import TableOfContents from "../../components/roadmap/TableOfContents";
 import { AddIcon, SmallAddIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -6,15 +9,21 @@ import {
   Grid,
   GridItem,
   Heading,
+  HStack,
   Stack,
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
-import Block, { BlockProps } from "../../components/roadmap/Block";
-import Sidebar from "../../components/roadmap/Sidebar";
-import TableOfContents from "../../components/roadmap/TableOfContents";
 
-const Header = ({ title }: { title: string }) => (
-  <Flex flex={1} textAlign="center" gap={2} flexDir="column">
+const Header = ({ title, ...props }: { title: string } & BoxProps) => (
+  <Flex
+    flex={1}
+    h={300}
+    textAlign="center"
+    gap={2}
+    flexDir="column"
+    justify="flex-end"
+    {...props}
+  >
     <Heading color="green.700" fontWeight="normal" size="md">
       5 Days &middot; {RESOURCES.length} Resources &middot; Beginner
     </Heading>
@@ -29,12 +38,9 @@ const Home: NextPage = () => {
   const author = "Jinay Jain";
 
   return (
-    <Grid
-      templateColumns="1fr minmax(auto, 900px) 1fr"
-      templateRows="300px auto"
-      gap={8}
-    >
-      <GridItem as={Flex} justify="flex-end" rowStart={2}>
+    <Box>
+      <Header title={title} mb={8} />
+      <Flex maxW="1400px" m="auto" align="flex-start">
         <Sidebar
           title={title}
           description={description}
@@ -42,29 +48,29 @@ const Home: NextPage = () => {
           maxW="200px"
           position="sticky"
           top={8}
-          alignSelf="flex-start"
+          display={{
+            base: "none",
+            md: "block",
+          }}
+          pr={8}
         />
-      </GridItem>
-      <GridItem alignItems="flex-end" display="flex" colStart={2}>
-        <Header title={title} />
-      </GridItem>
-      <GridItem colStart={2} rowStart={2}>
         <Stack gap={4}>
           {RESOURCES.map((resource, index) => (
             <Block key={index} {...resource} />
           ))}
         </Stack>
-      </GridItem>
-      <GridItem
-        rowStart={2}
-        colStart={3}
-        alignSelf="flex-start"
-        position="sticky"
-        top={8}
-      >
-        <TableOfContents resources={RESOURCES} />
-      </GridItem>
-    </Grid>
+        <TableOfContents
+          resources={RESOURCES}
+          position="sticky"
+          top={8}
+          display={{
+            base: "none",
+            lg: "block",
+          }}
+          pl={8}
+        />
+      </Flex>
+    </Box>
   );
 };
 

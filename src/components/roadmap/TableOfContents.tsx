@@ -1,13 +1,14 @@
-import { Box, Heading, Stack, Text } from "@chakra-ui/react";
+import { Box, BoxProps, Heading, Stack, Text } from "@chakra-ui/react";
 
 const TableOfContents = ({
   resources,
+  ...props
 }: {
   resources: {
     title: string;
   }[];
-}) => (
-  <Box>
+} & BoxProps) => (
+  <Box {...props}>
     <Text fontWeight="medium" size="sm" color="green.800" mb={2}>
       ROADMAP
     </Text>
