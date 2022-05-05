@@ -9,7 +9,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
-import Block from "../../components/roadmap/Block";
+import Block, { BlockProps } from "../../components/roadmap/Block";
 import Sidebar from "../../components/roadmap/Sidebar";
 import TableOfContents from "../../components/roadmap/TableOfContents";
 
@@ -74,48 +74,57 @@ const Home: NextPage = () => {
 export default Home;
 
 // a list of resources for learning about machine learning, in order
-const RESOURCES = [
+const RESOURCES: BlockProps[] = [
   {
+    type: "text",
     title: "What is Machine Learning?",
     description:
       "First, we need to understand the types of problems machine learning is best at solving. This article will help you understand the overall scope of machine learning and how it fits into the broader field of artificial intelligence.",
   },
   {
+    type: "text",
     title: "Essential Python for Machine Learning",
     description:
       "This article will help you understand the basics of Python and the most common ways to use it for machine learning.",
   },
   {
+    type: "text",
     title: "Crash Course in NumPy",
     description:
       "NumPy is a powerful library that allows you to perform common operations on arrays and matrices. This video will help you understand the basics of NumPy and how to use it to solve common machine learning problems.",
   },
   {
+    type: "text",
     title: "Train, Test, and Validation Split",
     description:
       "This article will help you understand how to split your data into training, testing, and validation sets. It will also help you understand how to use the train_test_split function to split your data into training and testing sets.",
   },
   {
+    type: "text",
     title: "Keras: Deep Learning for Python",
     description:
       "Keras is a powerful library that allows you to build and train deep learning models in Python. This video will help you understand the basics of Keras and how to use it to solve common machine learning problems.",
   },
   {
+    type: "text",
     title: "TensorFlow: Deep Learning for Python",
     description:
       "TensorFlow is a powerful library that allows you to build and train deep learning models in Python. This video will help you understand the basics of TensorFlow and how to use it to solve common machine learning problems.",
   },
   {
+    type: "text",
     title: "Linear Regression",
     description:
       "The first algorithm you will learn is linear regression. This article will help you understand the basics of linear regression and how to use it to solve common machine learning problems.",
   },
   {
+    type: "text",
     title: "Logistic Regression",
     description:
       "The second algorithm you will learn is logistic regression. This article will help you understand the basics of logistic regression and how to use it to solve common machine learning problems.",
   },
   {
+    type: "text",
     title: "K-Nearest Neighbors",
     description:
       "Finally, the third algorithm you will learn is k-nearest neighbors. This article will help you understand the basics of k-nearest neighbors and how to use it to solve common machine learning problems.",

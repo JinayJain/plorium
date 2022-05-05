@@ -5,7 +5,6 @@ const TableOfContents = ({
 }: {
   resources: {
     title: string;
-    description: string;
   }[];
 }) => (
   <Stack>
