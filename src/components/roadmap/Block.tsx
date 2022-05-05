@@ -1,4 +1,5 @@
 import { Badge, Box, Heading, Stack, Text } from "@chakra-ui/react";
+import { useState } from "react";
 
 interface TextBlockProps {
   type: "text";
@@ -8,7 +9,6 @@ interface TextBlockProps {
 
 interface ResourceBlockProps {
   type: "resource";
-  resourceType: "video" | "article" | "tutorial";
   title: string;
   url: string;
   description: string;
@@ -24,17 +24,16 @@ interface ProjectBlockProps {
 type BlockProps = TextBlockProps | ResourceBlockProps | ProjectBlockProps;
 
 const TextBlock = ({
-  type,
   title,
   description: text,
 }: TextBlockProps): JSX.Element => {
   return (
     <Stack bg="green.50" px={4} py={6} rounded="xl" shadow="md">
-      <Badge alignSelf="flex-start" colorScheme="blue">
-        VIDEO
-      </Badge>
       <Heading size="md" color="green.800">
         {title}
+        <Badge ml={2} alignSelf="flex-start" colorScheme="blue">
+          blog
+        </Badge>
       </Heading>
       <Text>{text}</Text>
     </Stack>

@@ -62,9 +62,6 @@ const Home: NextPage = () => {
         position="sticky"
         top={8}
       >
-        <Heading size="sm" color="green.700" mb={2}>
-          ROADMAP
-        </Heading>
         <TableOfContents resources={RESOURCES} />
       </GridItem>
     </Grid>
