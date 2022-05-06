@@ -6,6 +6,7 @@ import Sidebar from "../../components/roadmap/Sidebar";
 import TableOfContents from "../../components/roadmap/TableOfContents";
 import { Box, BoxProps, Flex, Heading, Stack } from "@chakra-ui/react";
 import type { NextPage } from "next";
+import Layout from "../../components/layout";
 
 const Header = ({ title, ...props }: { title: string } & BoxProps) => (
   <Flex
@@ -39,7 +40,7 @@ const Roadmap: NextPage = () => {
   const author = "Jinay Jain";
 
   return (
-    <Box>
+    <Layout title="Roadmap">
       <Header title={title} mb={8} />
       <Flex maxW="1400px" m="auto" align="flex-start">
         <Sidebar
@@ -61,7 +62,7 @@ const Roadmap: NextPage = () => {
               key={index}
               id={titleToId(resource.title)}
               scrollMarginTop={10}
-              {...resource}
+              properties={resource}
             />
           ))}
         </Stack>
@@ -80,7 +81,7 @@ const Roadmap: NextPage = () => {
           ml={8}
         />
       </Flex>
-    </Box>
+    </Layout>
   );
 };
 

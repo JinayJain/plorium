@@ -86,7 +86,7 @@ const ResourceBlock = ({
           shadow="md"
         >
           <Text>
-            <Tag mr={2}>Author&apos;s Comment</Tag> {comment}
+            <Tag mr={2}>Author&apos;s Note</Tag> {comment}
           </Text>
         </Box>
       )}
@@ -111,15 +111,20 @@ const ProjectBlock = ({
   );
 };
 
-const Block = (props: BlockProps & BoxProps): JSX.Element => {
+const Block = ({
+  properties,
+  ...props
+}: {
+  properties: BlockProps;
+} & BoxProps): JSX.Element => {
   const getInner = (): JSX.Element => {
-    switch (props.type) {
+    switch (properties.type) {
       case "text":
-        return <TextBlock {...props} />;
+        return <TextBlock {...properties} />;
       case "resource":
-        return <ResourceBlock {...props} />;
+        return <ResourceBlock {...properties} />;
       case "project":
-        return <ProjectBlock {...props} />;
+        return <ProjectBlock {...properties} />;
     }
   };
 
