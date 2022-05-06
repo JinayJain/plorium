@@ -1,10 +1,11 @@
-import { Box, BoxProps, Stack, Text } from "@chakra-ui/react";
+import { Box, BoxProps, Button, Link, Stack, Text } from "@chakra-ui/react";
 
 const TableOfContents = ({
   resources,
   ...props
 }: {
   resources: {
+    id: string;
     title: string;
   }[];
 } & BoxProps) => (
@@ -14,7 +15,18 @@ const TableOfContents = ({
     </Text>
     <Stack>
       {resources.map((resource, index) => (
-        <Text key={index}>{resource.title}</Text>
+        <Link
+          key={index}
+          as="a"
+          variant="link"
+          onClick={() => {
+            document.getElementById(resource.id)?.scrollIntoView({
+              behavior: "smooth",
+            });
+          }}
+        >
+          {resource.title}
+        </Link>
       ))}
     </Stack>
   </Box>

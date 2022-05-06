@@ -1,6 +1,7 @@
 import {
   Badge,
   Box,
+  BoxProps,
   Button,
   Heading,
   Link,
@@ -96,7 +97,7 @@ const ResourceBlock = ({
 const ProjectBlock = ({
   title,
   description,
-}: ProjectBlockProps): JSX.Element => {
+}: ProjectBlockProps & BoxProps): JSX.Element => {
   return (
     <Stack bg="green.50" px={4} py={6} rounded="xl" shadow="md" align="start">
       <Heading size="md" color="green.800">
@@ -110,15 +111,19 @@ const ProjectBlock = ({
   );
 };
 
-const Block = (props: BlockProps): JSX.Element => {
-  switch (props.type) {
-    case "text":
-      return <TextBlock {...props} />;
-    case "resource":
-      return <ResourceBlock {...props} />;
-    case "project":
-      return <ProjectBlock {...props} />;
-  }
+const Block = (props: BlockProps & BoxProps): JSX.Element => {
+  const getInner = (): JSX.Element => {
+    switch (props.type) {
+      case "text":
+        return <TextBlock {...props} />;
+      case "resource":
+        return <ResourceBlock {...props} />;
+      case "project":
+        return <ProjectBlock {...props} />;
+    }
+  };
+
+  return <Box {...props}>{getInner()}</Box>;
 };
 
 export default Block;

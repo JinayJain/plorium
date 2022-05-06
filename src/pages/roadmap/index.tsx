@@ -4,17 +4,7 @@ import Block, {
 } from "../../components/roadmap/Block";
 import Sidebar from "../../components/roadmap/Sidebar";
 import TableOfContents from "../../components/roadmap/TableOfContents";
-import { AddIcon, SmallAddIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  BoxProps,
-  Flex,
-  Grid,
-  GridItem,
-  Heading,
-  HStack,
-  Stack,
-} from "@chakra-ui/react";
+import { Box, BoxProps, Flex, Heading, Stack } from "@chakra-ui/react";
 import type { NextPage } from "next";
 
 const Header = ({ title, ...props }: { title: string } & BoxProps) => (
@@ -28,13 +18,21 @@ const Header = ({ title, ...props }: { title: string } & BoxProps) => (
     {...props}
   >
     <Heading color="green.700" fontWeight="normal" size="md">
-      5 Days &middot; {RESOURCES.length} Resources &middot; Beginner
+      5 Days &middot; {RESOURCES.filter((x) => x.type === "resource").length}{" "}
+      Resources &middot; Beginner
     </Heading>
     <Heading size="xl">{title}</Heading>
   </Flex>
 );
 
-const Home: NextPage = () => {
+const Roadmap: NextPage = () => {
+  const titleToId = (title: string) =>
+    title
+      .toLowerCase()
+      .replace(/\s/g, "-")
+      .replace(/[^a-z0-9-]/g, "")
+      .replace(/-+/g, "-");
+
   const title = "Beginner's Guide to Artificial Intelligence";
   const description =
     "A comprehensive guide to the world of artificial intelligence, with a focus on machine learning and deep learning.";
@@ -59,11 +57,19 @@ const Home: NextPage = () => {
         />
         <Stack gap={4} flex={1}>
           {RESOURCES.map((resource, index) => (
-            <Block key={index} {...resource} />
+            <Block
+              key={index}
+              id={titleToId(resource.title)}
+              scrollMarginTop={10}
+              {...resource}
+            />
           ))}
         </Stack>
         <TableOfContents
-          resources={RESOURCES}
+          resources={RESOURCES.map((x) => ({
+            id: titleToId(x.title),
+            ...x,
+          }))}
           position="sticky"
           maxW="200px"
           top={8}
@@ -78,7 +84,7 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Roadmap;
 
 // a list of resources for learning about machine learning, in order
 const RESOURCES: BlockProps[] = [
