@@ -1,12 +1,14 @@
 import { SmallAddIcon } from "@chakra-ui/icons";
 import {
-  BoxProps,
   Text,
-  Box,
+  Flex,
   Stack,
   Heading,
   HStack,
   Button,
+  AvatarGroup,
+  Avatar,
+  FlexProps,
 } from "@chakra-ui/react";
 
 const Sidebar = ({
@@ -14,8 +16,8 @@ const Sidebar = ({
   author,
   description,
   ...props
-}: { title: string; author: string; description: string } & BoxProps) => (
-  <Box {...props}>
+}: { title: string; author: string; description: string } & FlexProps) => (
+  <Flex {...props} flexDir="column">
     <Stack textAlign="right" align="flex-end" gap={2}>
       <Heading size="md">{title}</Heading>
       <HStack>
@@ -26,7 +28,15 @@ const Sidebar = ({
     <Button colorScheme="teal" w="full" mt={12} leftIcon={<SmallAddIcon />}>
       Join
     </Button>
-  </Box>
+    <HStack alignSelf="center" mt={4}>
+      <AvatarGroup size="sm">
+        <Avatar name="Harvey Specter" />
+        <Avatar name="Jessica Pearson" />
+        <Avatar name="Mike Ross" />
+      </AvatarGroup>
+      <Text color="gray.600">12 Learners</Text>
+    </HStack>
+  </Flex>
 );
 
 export default Sidebar;

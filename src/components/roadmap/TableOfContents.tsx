@@ -1,4 +1,4 @@
-import { Box, BoxProps, Heading, Stack, Text } from "@chakra-ui/react";
+import { Box, BoxProps, Stack, Text } from "@chakra-ui/react";
 
 const TableOfContents = ({
   resources,

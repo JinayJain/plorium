@@ -1,4 +1,7 @@
-import Block, { BlockProps } from "../../components/roadmap/Block";
+import Block, {
+  BlockProps,
+  ResourceType,
+} from "../../components/roadmap/Block";
 import Sidebar from "../../components/roadmap/Sidebar";
 import TableOfContents from "../../components/roadmap/TableOfContents";
 import { AddIcon, SmallAddIcon } from "@chakra-ui/icons";
@@ -44,17 +47,17 @@ const Home: NextPage = () => {
         <Sidebar
           title={title}
           description={description}
-          author={author}
           maxW="200px"
+          author={author}
           position="sticky"
           top={8}
           display={{
             base: "none",
-            md: "block",
+            md: "flex",
           }}
-          pr={8}
+          mr={8}
         />
-        <Stack gap={4}>
+        <Stack gap={4} flex={1}>
           {RESOURCES.map((resource, index) => (
             <Block key={index} {...resource} />
           ))}
@@ -62,12 +65,13 @@ const Home: NextPage = () => {
         <TableOfContents
           resources={RESOURCES}
           position="sticky"
+          maxW="200px"
           top={8}
           display={{
             base: "none",
             lg: "block",
           }}
-          pl={8}
+          ml={8}
         />
       </Flex>
     </Box>
@@ -80,56 +84,72 @@ export default Home;
 const RESOURCES: BlockProps[] = [
   {
     type: "text",
+    title: "Welcome to the Roadmap!",
+    description:
+      "This roadmap is meant to be a guide through the world of AI. It includes a list of resources to help you get started, as well as a list of projects that you can try out as you begin to learn. We'll first learn about the concepts behind machine learning, then we will dive into the specifics of how to implement these in Python.",
+  },
+  {
+    type: "resource",
+    resourceType: ResourceType.Video,
     title: "What is Machine Learning?",
-    description:
-      "First, we need to understand the types of problems machine learning is best at solving. This article will help you understand the overall scope of machine learning and how it fits into the broader field of artificial intelligence.",
+    url: "https://www.youtube.com/watch?v=QH2-TGUlwu4",
+    comment:
+      "A short introduction to machine learning, where it's used and why it has come to dominate computer science.",
+  },
+  {
+    type: "resource",
+    resourceType: ResourceType.Video,
+    title: "The Difference Between Deep Learning and Machine Learning",
+    url: "https://www.youtube.com/watch?v=QH2-TGUlwu4",
+    comment:
+      "Many people think that machine learning and deep learning are the same. This is not entirely true. Deep learning is a subset of machine learning that is more focused on neural networks.",
   },
   {
     type: "text",
-    title: "Essential Python for Machine Learning",
+    title: "Coding",
     description:
-      "This article will help you understand the basics of Python and the most common ways to use it for machine learning.",
+      "Most of the time, you'll be coding in Python. We'll start with a simple example, and then move on to more complex examples. We'll also cover some of the more advanced topics, such as neural networks and reinforcement learning.",
+  },
+  {
+    type: "resource",
+    resourceType: ResourceType.Blog,
+    title: "Python for ML Beginners",
+    url: "https://www.kaggle.com/jamesmcguigan/python-for-ml-beginners",
+  },
+  {
+    type: "resource",
+    resourceType: ResourceType.Tutorial,
+    title: "Deep Learning with PyTorch: A 60 Minute Blitz",
+    url: "https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html",
+  },
+  {
+    type: "project",
+    title: "MNIST Digit Classifier",
+    description:
+      "A simple MNIST digit classifier. It uses the LeNet architecture, and uses the PyTorch library.",
   },
   {
     type: "text",
-    title: "Crash Course in NumPy",
+    title: "Seminal Papers",
     description:
-      "NumPy is a powerful library that allows you to perform common operations on arrays and matrices. This video will help you understand the basics of NumPy and how to use it to solve common machine learning problems.",
+      "The field of machine learning is a rapidly growing field. There are many seminal papers that have been published, and there are many more to come. We'll cover some of the most recent ones, but the list is ever-growing.",
   },
   {
-    type: "text",
-    title: "Train, Test, and Validation Split",
-    description:
-      "This article will help you understand how to split your data into training, testing, and validation sets. It will also help you understand how to use the train_test_split function to split your data into training and testing sets.",
+    type: "resource",
+    resourceType: ResourceType.Paper,
+    title: "Attention Is All You Need",
+    url: "https://arxiv.org/pdf/1706.03762.pdf",
   },
   {
-    type: "text",
-    title: "Keras: Deep Learning for Python",
-    description:
-      "Keras is a powerful library that allows you to build and train deep learning models in Python. This video will help you understand the basics of Keras and how to use it to solve common machine learning problems.",
+    type: "resource",
+    resourceType: ResourceType.Paper,
+    title: "A Neural Algorithm of Artistic Style",
+    url: "https://arxiv.org/pdf/1508.06576.pdf",
   },
   {
-    type: "text",
-    title: "TensorFlow: Deep Learning for Python",
-    description:
-      "TensorFlow is a powerful library that allows you to build and train deep learning models in Python. This video will help you understand the basics of TensorFlow and how to use it to solve common machine learning problems.",
-  },
-  {
-    type: "text",
-    title: "Linear Regression",
-    description:
-      "The first algorithm you will learn is linear regression. This article will help you understand the basics of linear regression and how to use it to solve common machine learning problems.",
-  },
-  {
-    type: "text",
-    title: "Logistic Regression",
-    description:
-      "The second algorithm you will learn is logistic regression. This article will help you understand the basics of logistic regression and how to use it to solve common machine learning problems.",
-  },
-  {
-    type: "text",
-    title: "K-Nearest Neighbors",
-    description:
-      "Finally, the third algorithm you will learn is k-nearest neighbors. This article will help you understand the basics of k-nearest neighbors and how to use it to solve common machine learning problems.",
+    type: "resource",
+    resourceType: ResourceType.Paper,
+    title: "Generative Adversarial Networks",
+    url: "https://arxiv.org/pdf/1406.2661.pdf",
   },
 ];
