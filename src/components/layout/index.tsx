@@ -1,6 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import Head from "next/head";
-import Nav from "./Nav";
+import Footer from "./Footer";
+import Nav, { NAV_HEIGHT } from "./Nav";
 
 const Layout = ({
   title,
@@ -15,7 +16,10 @@ const Layout = ({
         <title>{title}</title>
       </Head>
       <Nav />
-      <Box px={4}>{children}</Box>
+      <Box px={4} pb={8} minH={`calc(100vh - ${NAV_HEIGHT})`}>
+        {children}
+      </Box>
+      <Footer />
     </Box>
   );
 };

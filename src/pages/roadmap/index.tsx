@@ -7,11 +7,12 @@ import TableOfContents from "../../components/roadmap/TableOfContents";
 import { Box, BoxProps, Flex, Heading, Stack } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import Layout from "../../components/layout";
+import { NAV_HEIGHT } from "../../components/layout/Nav";
 
 const Header = ({ title, ...props }: { title: string } & BoxProps) => (
   <Flex
     flex={1}
-    h={300}
+    h={200}
     textAlign="center"
     gap={2}
     flexDir="column"
@@ -39,6 +40,8 @@ const Roadmap: NextPage = () => {
     "A comprehensive guide to the world of artificial intelligence, with a focus on machine learning and deep learning.";
   const author = "Jinay Jain";
 
+  const navOffset = `calc(${NAV_HEIGHT} + 16px)`;
+
   return (
     <Layout title="Roadmap">
       <Header title={title} mb={8} />
@@ -49,7 +52,7 @@ const Roadmap: NextPage = () => {
           maxW="200px"
           author={author}
           position="sticky"
-          top={8}
+          top={navOffset}
           display={{
             base: "none",
             md: "flex",
@@ -61,7 +64,7 @@ const Roadmap: NextPage = () => {
             <Block
               key={index}
               id={titleToId(resource.title)}
-              scrollMarginTop={10}
+              scrollMarginTop={navOffset}
               properties={resource}
             />
           ))}
@@ -73,7 +76,7 @@ const Roadmap: NextPage = () => {
           }))}
           position="sticky"
           maxW="200px"
-          top={8}
+          top={navOffset}
           display={{
             base: "none",
             lg: "block",
