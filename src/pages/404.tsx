@@ -1,4 +1,4 @@
-import { Button, Flex, Heading, Spacer, Stack } from "@chakra-ui/react";
+import { Button, Flex, Heading, Spacer, Stack, Text } from "@chakra-ui/react";
 import Layout from "../components/layout";
 import NextLink from "next/link";
 
@@ -18,9 +18,9 @@ const Page404 = () => {
           <Heading>
             Sorry, we couldn&apos;t find the page you were looking for
           </Heading>
-          <Heading size="md" color="gray.600">
+          <Text fontSize="xl" color="gray.600">
             Let&apos;s get you back to finding the best learning resources
-          </Heading>
+          </Text>
         </Stack>
         <NextLink href="/" passHref>
           <Button

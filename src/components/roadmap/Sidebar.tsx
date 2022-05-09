@@ -18,7 +18,7 @@ const Sidebar = ({
   ...props
 }: { title: string; author: string; description: string } & FlexProps) => (
   <Flex {...props} flexDir="column">
-    <Stack textAlign="right" align="flex-end" gap={2}>
+    <Stack gap={2}>
       <Heading size="md">{title}</Heading>
       <HStack>
         <Heading size="sm">{author}</Heading>

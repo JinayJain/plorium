@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, HStack, Link } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, HStack, Link } from "@chakra-ui/react";
 import NextLink from "next/link";
 
 export const NAV_HEIGHT = "64px";
@@ -7,6 +7,14 @@ const NAV_ITEMS = [
   {
     label: "Roadmaps",
     href: "/roadmap",
+  },
+  {
+    label: "Resources",
+    href: "/resource",
+  },
+  {
+    label: "Projects",
+    href: "/project",
   },
   {
     label: "Create",
@@ -39,7 +47,7 @@ const Nav = () => {
             <Heading size="lg">Plorium</Heading>
           </Link>
         </NextLink>
-        <HStack spacing={4} ml={8}>
+        <HStack spacing={6} ml={12}>
           {NAV_ITEMS.map((item) => (
             <NextLink key={item.label} href={item.href} passHref>
               <Link>{item.label}</Link>
