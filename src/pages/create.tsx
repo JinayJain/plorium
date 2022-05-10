@@ -1,15 +1,18 @@
-import { Button, Flex, Heading, HStack, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { cursorTo } from "readline";
+import DescribeStep from "../components/create/DescribeStep";
 import Steps from "../components/create/Steps";
 import Layout from "../components/layout";
-
-const Describe = () => {
-  return (
-    <Flex align="center" flexDir="column">
-      <Heading>Describe your roadmap</Heading>
-    </Flex>
-  );
-};
 
 const Build = () => {
   return (
@@ -33,7 +36,7 @@ const Create = () => {
   const steps = [
     {
       title: "Describe",
-      component: <Describe />,
+      component: <DescribeStep />,
     },
 
     {
@@ -47,19 +50,30 @@ const Create = () => {
     },
   ];
 
+  const changeStep = (delta: number) =>
+    setCurrStep(Math.max(0, Math.min(currStep + delta, steps.length - 1)));
+
   return (
     <Layout title="Create">
-      <Stack maxW="1400px" m="auto" pt={24}>
+      <Stack m="auto" maxW="1000px" pt={24} align="stretch" spacing={8}>
         <Steps
+          alignSelf="stretch"
           maxW="800px"
+          w="full"
           m="auto"
           steps={steps.map((x) => x.title)}
           currStep={currStep}
         />
-        {steps[0].component}
+        {steps[currStep].component}
         <HStack alignSelf="flex-end">
-          <Button variant="outline">Back</Button>
-          <Button colorScheme="green" variant="solid">
+          <Button variant="outline" onClick={() => changeStep(-1)}>
+            Back
+          </Button>
+          <Button
+            colorScheme="green"
+            variant="solid"
+            onClick={() => changeStep(1)}
+          >
             Continue
           </Button>
         </HStack>

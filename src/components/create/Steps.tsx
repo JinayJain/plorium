@@ -1,14 +1,11 @@
 import {
   Box,
   BoxProps,
-  Button,
   Circle,
   HStack,
   StackProps,
   Text,
-  VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
 
 const ProgressBarInner = ({ percent }: { percent: number }) => {
   return (
@@ -55,7 +52,7 @@ const Step = ({
         border={isCurrent || !completed ? "2px solid" : "none"}
         borderColor={isCurrent ? "green.500" : "gray.500"}
         size={size}
-        // transition="color ease 0.5s"
+        transition="color ease 0.5s"
       >
         <Text fontSize="xl">{index}</Text>
       </Circle>
@@ -89,7 +86,7 @@ const Steps = ({
           />
         ) : (
           <>
-            <ProgressBar flex={1} percent={percent} />
+            <ProgressBar key={`${step}-divider`} flex={1} percent={percent} />
             <Step
               key={step}
               title={step}
