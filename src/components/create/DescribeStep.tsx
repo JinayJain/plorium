@@ -1,4 +1,5 @@
 import {
+  Button,
   Flex,
   FormControl,
   FormLabel,
@@ -16,28 +17,22 @@ interface DescribeValues {
   description: string;
 }
 
-const DescribeStep = () => {
+const DescribeStep = ({ onNext }: { onNext: () => void }) => {
   return (
-    <AnimatePresence>
-      <Formik
-        initialValues={{ title: "", description: "" }}
-        onSubmit={console.log}
-      >
-        <Flex flexDir="column">
-          <Heading m="auto">Describe your roadmap</Heading>
-          <Stack as="form" flexDir="column" spacing={4}>
-            <FormControl>
-              <FormLabel>Title</FormLabel>
-              <Input type="text" placeholder="Title" />
-            </FormControl>
-            <FormControl>
-              <FormLabel>Description</FormLabel>
-              <Textarea placeholder="Describe your roadmap in a few sentences" />
-            </FormControl>
-          </Stack>
-        </Flex>
-      </Formik>
-    </AnimatePresence>
+    <Stack spacing={4}>
+      <Heading alignSelf="center">Describe your roadmap</Heading>
+      <FormControl>
+        <FormLabel>Title</FormLabel>
+        <Input type="text" placeholder="Title" />
+      </FormControl>
+      <FormControl>
+        <FormLabel>Description</FormLabel>
+        <Textarea placeholder="Describe your roadmap" h={100} />
+      </FormControl>
+      <Button alignSelf="flex-end" onClick={onNext} colorScheme="green">
+        Continue
+      </Button>
+    </Stack>
   );
 };
 

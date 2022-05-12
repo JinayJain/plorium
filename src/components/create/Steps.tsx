@@ -54,7 +54,9 @@ const Step = ({
         size={size}
         transition="color ease 0.5s"
       >
-        <Text fontSize="xl">{index}</Text>
+        <Text fontSize="xl" fontWeight="bold">
+          {index}
+        </Text>
       </Circle>
       <Text>{title}</Text>
     </HStack>

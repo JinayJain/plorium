@@ -7,51 +7,42 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { cursorTo } from "readline";
+import BuildStep from "../components/create/BuildStep";
 import DescribeStep from "../components/create/DescribeStep";
+import PublishStep from "../components/create/PublishStep";
 import Steps from "../components/create/Steps";
 import Layout from "../components/layout";
-
-const Build = () => {
-  return (
-    <Flex align="center" flexDir="column">
-      <Heading>Build your roadmap</Heading>
-    </Flex>
-  );
-};
-
-const Publish = () => {
-  return (
-    <Flex align="center" flexDir="column">
-      <Heading>Publish your roadmap</Heading>
-    </Flex>
-  );
-};
 
 const Create = () => {
   const [currStep, setCurrStep] = useState(0);
 
+  const changeStep = (delta: number) =>
+    setCurrStep(Math.max(0, Math.min(currStep + delta, steps.length - 1)));
+
   const steps = [
     {
       title: "Describe",
-      component: <DescribeStep />,
+      component: <DescribeStep onNext={() => changeStep(1)} />,
     },
 
     {
       title: "Build",
-      component: <Build />,
+      component: (
+        <BuildStep onNext={() => changeStep(1)} onPrev={() => changeStep(-1)} />
+      ),
     },
 
     {
       title: "Publish",
-      component: <Publish />,
+      component: (
+        <PublishStep
+          onSubmit={() => changeStep(1)}
+          onPrev={() => changeStep(-1)}
+        />
+      ),
     },
   ];
-
-  const changeStep = (delta: number) =>
-    setCurrStep(Math.max(0, Math.min(currStep + delta, steps.length - 1)));
 
   return (
     <Layout title="Create">
@@ -65,18 +56,6 @@ const Create = () => {
           currStep={currStep}
         />
         {steps[currStep].component}
-        <HStack alignSelf="flex-end">
-          <Button variant="outline" onClick={() => changeStep(-1)}>
-            Back
-          </Button>
-          <Button
-            colorScheme="green"
-            variant="solid"
-            onClick={() => changeStep(1)}
-          >
-            Continue
-          </Button>
-        </HStack>
       </Stack>
     </Layout>
   );
