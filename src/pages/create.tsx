@@ -78,7 +78,7 @@ const Create = () => {
           steps={steps.map((x) => x.title)}
           currStep={currStep}
         />
-        <AnimatePresence exitBeforeEnter>
+        <AnimatePresence exitBeforeEnter initial={false}>
           <motion.div
             key={currStep}
             initial={{

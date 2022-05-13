@@ -1,4 +1,12 @@
-import { Box, Button, Heading, HStack, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Heading,
+  HStack,
+  Stack,
+  VStack,
+  Text,
+} from "@chakra-ui/react";
 
 const PublishStep = ({
   onSubmit,
@@ -9,7 +17,14 @@ const PublishStep = ({
 }) => {
   return (
     <Stack>
-      <Heading alignSelf="center">Publish your roadmap</Heading>
+      <VStack alignSelf="center" textAlign="center">
+        <Heading>Publish your roadmap</Heading>
+        <Text color="gray" maxW="600px">
+          Review your roadmap to check it for completeness and errors. Once you
+          hit publish, it will be available for anyone to start their learning
+          journey.
+        </Text>
+      </VStack>
       <HStack alignSelf="flex-end">
         <Button variant="outline" onClick={onPrev}>
           Back

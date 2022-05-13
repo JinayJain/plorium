@@ -1,4 +1,12 @@
-import { Box, Button, Heading, HStack, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Heading,
+  HStack,
+  Stack,
+  VStack,
+  Text,
+} from "@chakra-ui/react";
 
 const BuildStep = ({
   onNext,
@@ -9,7 +17,13 @@ const BuildStep = ({
 }) => {
   return (
     <Stack spacing={4}>
-      <Heading alignSelf="center">Build your roadmap</Heading>
+      <VStack alignSelf="center" textAlign="center">
+        <Heading>Build your roadmap</Heading>
+        <Text color="gray" maxW="600px">
+          Assemble the resources, guidance, and project materials for learners
+          following your roadmap.
+        </Text>
+      </VStack>
       <Box h={500} bg="gray.200" rounded="xl"></Box>
       <HStack alignSelf="flex-end">
         <Button variant="outline" onClick={onPrev}>

@@ -6,7 +6,9 @@ import {
   Heading,
   Input,
   Stack,
+  Text,
   Textarea,
+  VStack,
 } from "@chakra-ui/react";
 import { Field, Form, Formik, FormikProps } from "formik";
 import * as Yup from "yup";
@@ -37,7 +39,13 @@ const DescribeStep = ({
       {(props: FormikProps<DescribeValues>) => (
         <Form>
           <Stack spacing={4}>
-            <Heading alignSelf="center">Describe your roadmap</Heading>
+            <VStack alignSelf="center" textAlign="center">
+              <Heading>Describe your roadmap</Heading>
+              <Text color="gray" maxW="600px">
+                Help learners understand the purpose and scope of your roadmap
+                by providing a descriptive title and a short description.
+              </Text>
+            </VStack>
             <FormControl
               isInvalid={!!props.errors.title && props.touched.title}
             >
