@@ -7,15 +7,27 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import BuildStep from "../components/create/BuildStep";
-import DescribeStep from "../components/create/DescribeStep";
+import DescribeStep, {
+  DescribeValues,
+} from "../components/create/DescribeStep";
 import PublishStep from "../components/create/PublishStep";
 import Steps from "../components/create/Steps";
 import Layout from "../components/layout";
 
+interface RoadmapValues {
+  title: string;
+  description: string;
+}
+
 const Create = () => {
   const [currStep, setCurrStep] = useState(0);
+  const [roadmap, setRoadmap] = useState<RoadmapValues>({
+    title: "",
+    description: "",
+  });
 
   const changeStep = (delta: number) =>
     setCurrStep(Math.max(0, Math.min(currStep + delta, steps.length - 1)));
@@ -23,7 +35,18 @@ const Create = () => {
   const steps = [
     {
       title: "Describe",
-      component: <DescribeStep onNext={() => changeStep(1)} />,
+      component: (
+        <DescribeStep
+          onNext={(values) => {
+            setRoadmap({
+              ...roadmap,
+              ...values,
+            });
+            changeStep(1);
+          }}
+          values={roadmap}
+        />
+      ),
     },
 
     {
@@ -55,7 +78,26 @@ const Create = () => {
           steps={steps.map((x) => x.title)}
           currStep={currStep}
         />
-        {steps[currStep].component}
+        <AnimatePresence exitBeforeEnter>
+          <motion.div
+            key={currStep}
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            exit={{
+              opacity: 0,
+              y: -20,
+            }}
+            transition={{ duration: 0.2 }}
+          >
+            {steps[currStep].component}
+          </motion.div>
+        </AnimatePresence>
       </Stack>
     </Layout>
   );
