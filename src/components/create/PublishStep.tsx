@@ -19,10 +19,9 @@ const PublishStep = ({
     <Stack>
       <VStack alignSelf="center" textAlign="center">
         <Heading>Publish your roadmap</Heading>
-        <Text color="gray" maxW="600px">
-          Review your roadmap to check it for completeness and errors. Once you
-          hit publish, it will be available for anyone to start their learning
-          journey.
+        <Text color="gray" maxW="700px">
+          Take a moment to review your roadmap and make sure everything is how
+          you want it.
         </Text>
       </VStack>
       <HStack alignSelf="flex-end">

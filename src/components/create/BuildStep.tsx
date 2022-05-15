@@ -7,6 +7,8 @@ import {
   VStack,
   Text,
 } from "@chakra-ui/react";
+import { useState } from "react";
+import BlockEditor from "./BlockEditor";
 
 const BuildStep = ({
   onNext,
@@ -19,12 +21,12 @@ const BuildStep = ({
     <Stack spacing={4}>
       <VStack alignSelf="center" textAlign="center">
         <Heading>Build your roadmap</Heading>
-        <Text color="gray" maxW="600px">
+        <Text color="gray" maxW="700px">
           Assemble the resources, guidance, and project materials for learners
           following your roadmap.
         </Text>
       </VStack>
-      <Box h={500} bg="gray.200" rounded="xl"></Box>
+      <BlockEditor />
       <HStack alignSelf="flex-end">
         <Button variant="outline" onClick={onPrev}>
           Back

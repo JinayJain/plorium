@@ -41,7 +41,7 @@ const DescribeStep = ({
           <Stack spacing={4}>
             <VStack alignSelf="center" textAlign="center">
               <Heading>Describe your roadmap</Heading>
-              <Text color="gray" maxW="600px">
+              <Text color="gray" maxW="700px">
                 Help learners understand the purpose and scope of your roadmap
                 by providing a descriptive title and a short description.
               </Text>

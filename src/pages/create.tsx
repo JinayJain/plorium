@@ -10,9 +10,7 @@ import {
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import BuildStep from "../components/create/BuildStep";
-import DescribeStep, {
-  DescribeValues,
-} from "../components/create/DescribeStep";
+import DescribeStep from "../components/create/DescribeStep";
 import PublishStep from "../components/create/PublishStep";
 import Steps from "../components/create/Steps";
 import Layout from "../components/layout";
@@ -23,7 +21,7 @@ interface RoadmapValues {
 }
 
 const Create = () => {
-  const [currStep, setCurrStep] = useState(0);
+  const [currStep, setCurrStep] = useState(1);
   const [roadmap, setRoadmap] = useState<RoadmapValues>({
     title: "",
     description: "",

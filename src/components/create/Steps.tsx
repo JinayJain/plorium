@@ -6,6 +6,7 @@ import {
   StackProps,
   Text,
 } from "@chakra-ui/react";
+import React from "react";
 
 const ProgressBarInner = ({ percent }: { percent: number }) => {
   return (
@@ -87,8 +88,8 @@ const Steps = ({
             isCurrent={isCurrent}
           />
         ) : (
-          <>
-            <ProgressBar key={`${step}-divider`} flex={1} percent={percent} />
+          <React.Fragment key={step}>
+            <ProgressBar flex={1} percent={percent} />
             <Step
               key={step}
               title={step}
@@ -96,7 +97,7 @@ const Steps = ({
               completed={completed}
               isCurrent={isCurrent}
             />
-          </>
+          </React.Fragment>
         );
       })}
     </HStack>
