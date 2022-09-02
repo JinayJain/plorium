@@ -1,26 +1,12 @@
-import { GetServerSidePropsContext } from "next";
-import { getRoadmapById } from "../../server/db/queries";
-import InferNextProps from "../../util/types/InferNextProps";
+import { Text } from "@chakra-ui/react";
+import Layout from "@/components/layout/Layout";
 
-function Roadmap({ roadmap }: InferNextProps<typeof getServerSideProps>) {
+function Roadmap() {
   return (
-    <div>
-      <h1>{roadmap?.name}</h1>
-    </div>
+    <Layout>
+      <Text>Hello</Text>
+    </Layout>
   );
 }
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  const id = context.params?.id;
-  const roadmap = await getRoadmapById(parseInt(id as string, 10));
-
-  return {
-    props: {
-      roadmap,
-    },
-  };
-};
 
 export default Roadmap;

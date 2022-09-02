@@ -30,44 +30,74 @@ model User {
 
   createdAt DateTime @default(now())
 
-  accounts  Account[]
-  sessions  Session[]
-  resources Resource[]
-  roadmaps  Roadmap[]
+  accounts           Account[]
+  sessions           Session[]
+  authoredResources  Resource[]
+  authoredRoadmaps   Roadmap[]
+  subscribedRoadmaps RoadmapLearner[]
 }
 
 model Resource {
-  id        Int    @id @default(autoincrement())
-  name      String
-  creatorId String
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String
+  url         String
+  type        ResourceType
+  authorId    String
 
+  updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 
-  creator  User                  @relation(fields: [creatorId], references: [id])
-  roadmaps ResourcesOnRoadmaps[]
+  author User           @relation(fields: [authorId], references: [id])
+  blocks RoadmapBlock[]
+}
+
+enum ResourceType {
+  VIDEO
+  BLOG
+  TUTORIAL
+  DOCUMENT
+  PAPER
 }
 
 model Roadmap {
-  id       Int    @id @default(autoincrement())
-  name     String
-  authorId String
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+  authorId    String
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  author   User             @relation(fields: [authorId], references: [id])
+  learners RoadmapLearner[]
+}
+
+model RoadmapBlock {
+  id         Int              @id @default(autoincrement())
+  roadmapId  Int
+  type       RoadmapBlockType
+  resourceId Int?
 
   createdAt DateTime @default(now())
 
-  author    User                  @relation(fields: [authorId], references: [id])
-  resources ResourcesOnRoadmaps[]
+  resource Resource? @relation(fields: [resourceId], references: [id])
 }
 
-model ResourcesOnRoadmaps {
-  resourceId Int
-  roadmapId  Int
-  position   Int
+enum RoadmapBlockType {
+  RESOURCE
+}
 
-  resource Resource @relation(fields: [resourceId], references: [id])
-  roadmap  Roadmap  @relation(fields: [roadmapId], references: [id])
+model RoadmapLearner {
+  roadmapId Int
+  userId    String
 
-  @@id([resourceId, roadmapId])
-  @@unique([roadmapId, position])
+  createdAt DateTime @default(now())
+
+  roadmap Roadmap @relation(fields: [roadmapId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@unique([roadmapId, userId])
 }
 
 // Authentication Tables
