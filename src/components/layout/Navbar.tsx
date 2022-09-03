@@ -57,7 +57,7 @@ function ProfileMenu({
         borderRadius={8}
       >
         <HStack spacing={2}>
-          <Avatar src={user.image ?? ""} size="sm" />
+          <Avatar src={user.image ?? ""} name={user.name ?? ""} size="sm" />
           <Text>{user.name}</Text>
         </HStack>
       </MenuButton>
@@ -67,6 +67,33 @@ function ProfileMenu({
         </NextLink>
         <MenuDivider />
         <MenuItem onClick={() => signOut()}>Log out</MenuItem>
+      </MenuList>
+    </Menu>
+  );
+}
+
+function CreateMenu() {
+  return (
+    <Menu>
+      <MenuButton
+        as={Button}
+        size="sm"
+        rightIcon={<SmallAddIcon />}
+        colorScheme="green"
+        variant="outline"
+      >
+        Create
+      </MenuButton>
+      <MenuList>
+        <NextLink href="/roadmap/create">
+          <MenuItem icon={<FaRoad />}>Roadmap</MenuItem>
+        </NextLink>
+        <NextLink href="/resource/create">
+          <MenuItem icon={<FaGlobe />}>Resource</MenuItem>
+        </NextLink>
+        <NextLink href="/project/create">
+          <MenuItem icon={<FaHammer />}>Project</MenuItem>
+        </NextLink>
       </MenuList>
     </Menu>
   );
@@ -104,29 +131,7 @@ function Navbar() {
           </Button>
         ) : (
           <HStack spacing={4}>
-            <Menu>
-              <MenuButton
-                as={Button}
-                size="sm"
-                rightIcon={<SmallAddIcon />}
-                colorScheme="green"
-                variant="outline"
-              >
-                Create
-              </MenuButton>
-              <MenuList>
-                <NextLink href="/roadmap/create">
-                  <MenuItem icon={<FaRoad />}>Roadmap</MenuItem>
-                </NextLink>
-                <NextLink href="/resource/create">
-                  <MenuItem icon={<FaGlobe />}>Resource</MenuItem>
-                </NextLink>
-                <NextLink href="/project/create">
-                  <MenuItem icon={<FaHammer />}>Project</MenuItem>
-                </NextLink>
-              </MenuList>
-            </Menu>
-
+            <CreateMenu />
             <ProfileMenu user={session.user} />
           </HStack>
         )}
