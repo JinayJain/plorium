@@ -1,15 +1,9 @@
+import resourceRouter from "@/core/api/router/resource";
 import * as trpc from "@trpc/server";
 import * as trpcNext from "@trpc/server/adapters/next";
 import { z } from "zod";
 
-const appRouter = trpc.router().query("hello", {
-  input: z.object({
-    name: z.string(),
-  }),
-  resolve({ input }) {
-    return `Hello ${input.name}`;
-  },
-});
+const appRouter = trpc.router().merge("resource.", resourceRouter);
 
 export type AppRouter = typeof appRouter;
 

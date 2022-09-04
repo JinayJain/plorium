@@ -18,7 +18,13 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import NextLink from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { SmallAddIcon } from "@chakra-ui/icons";
-import { FaGlobe, FaHammer, FaRoad } from "react-icons/fa";
+import {
+  FaGlobe,
+  FaHammer,
+  FaRoad,
+  FaSignOutAlt,
+  FaUser,
+} from "react-icons/fa";
 
 const NAV_LINKS = [
   {
@@ -63,10 +69,12 @@ function ProfileMenu({
       </MenuButton>
       <MenuList>
         <NextLink href="/me">
-          <MenuItem>Profile</MenuItem>
+          <MenuItem icon={<FaUser />}>Profile</MenuItem>
         </NextLink>
         <MenuDivider />
-        <MenuItem onClick={() => signOut()}>Log out</MenuItem>
+        <MenuItem icon={<FaSignOutAlt />} onClick={() => signOut()}>
+          Log out
+        </MenuItem>
       </MenuList>
     </Menu>
   );
@@ -74,7 +82,7 @@ function ProfileMenu({
 
 function CreateMenu() {
   return (
-    <Menu>
+    <Menu placement="bottom-end">
       <MenuButton
         as={Button}
         size="sm"
