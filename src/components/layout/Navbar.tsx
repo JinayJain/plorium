@@ -36,6 +36,10 @@ const NAV_LINKS = [
     href: "/roadmap",
   },
   {
+    name: "Resource",
+    href: "/resource",
+  },
+  {
     name: "About",
     href: "/about",
   },
