@@ -32,11 +32,11 @@ const NAV_LINKS = [
     href: "/explore",
   },
   {
-    name: "Roadmap",
+    name: "Roadmaps",
     href: "/roadmap",
   },
   {
-    name: "Resource",
+    name: "Resources",
     href: "/resource",
   },
   {
