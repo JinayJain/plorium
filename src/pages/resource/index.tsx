@@ -1,7 +1,7 @@
 import { Box, Heading, Link, Stack } from "@chakra-ui/react";
 
 import Layout from "@/components/layout/Layout";
-import prisma from "@/util/server/db/prisma";
+import { prisma } from "@/util/server/db/prisma";
 import InferNextProps from "@/util/types/InferNextProps";
 
 function Resources({ resources }: InferNextProps<typeof getServerSideProps>) {

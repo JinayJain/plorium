@@ -2,7 +2,7 @@ import { ResourceType } from "@prisma/client";
 import * as trpc from "@trpc/server";
 import { z } from "zod";
 
-import prisma from "@/util/server/db/prisma";
+import { prisma } from "@/util/server/db/prisma";
 
 const resourceRouter = trpc.router().mutation("create", {
   input: z.object({
