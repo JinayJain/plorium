@@ -1,8 +1,9 @@
-import Layout from "@/components/layout/Layout";
-import InferNextProps from "@/util/types/InferNextProps";
-import { Text, Heading, Link } from "@chakra-ui/react";
+import { Heading, Link, Text } from "@chakra-ui/react";
 import { GetServerSidePropsContext } from "next";
+
+import Layout from "@/components/layout/Layout";
 import { prisma } from "@/util/server/db/prisma";
+import InferNextProps from "@/util/types/InferNextProps";
 
 function ViewResource({ resource }: InferNextProps<typeof getServerSideProps>) {
   return (

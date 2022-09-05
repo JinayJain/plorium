@@ -1,14 +1,12 @@
-import Layout from "@/components/layout/Layout";
 import { Button, Center } from "@chakra-ui/react";
+import { GetServerSideProps } from "next";
+import { unstable_getServerSession } from "next-auth";
+import { signIn } from "next-auth/react";
 import React from "react";
 import { FaGoogle } from "react-icons/fa";
-import { signIn } from "next-auth/react";
-import {
-  GetServerSideProps,
-  GetServerSidePropsContext,
-  GetServerSidePropsResult,
-} from "next";
-import { unstable_getServerSession } from "next-auth";
+
+import Layout from "@/components/layout/Layout";
+
 import { authOptions } from "./api/auth/[...nextauth]";
 
 const Login = () => {
@@ -27,11 +25,11 @@ const Login = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<{}> = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const session = await unstable_getServerSession(
     ctx.req,
     ctx.res,
-    authOptions
+    authOptions,
   );
 
   if (session) {

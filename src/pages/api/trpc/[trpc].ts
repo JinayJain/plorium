@@ -1,7 +1,8 @@
-import resourceRouter from "@/core/api/router/resource";
 import * as trpc from "@trpc/server";
 import * as trpcNext from "@trpc/server/adapters/next";
 import { z } from "zod";
+
+import resourceRouter from "@/core/api/router/resource";
 
 const appRouter = trpc.router().merge("resource.", resourceRouter);
 

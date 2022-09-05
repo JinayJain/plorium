@@ -1,10 +1,11 @@
+import { SmallAddIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
   Button,
   Flex,
-  Heading,
   HStack,
+  Heading,
   Link,
   Menu,
   MenuButton,
@@ -16,8 +17,6 @@ import {
 } from "@chakra-ui/react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import NextLink from "next/link";
-import { FcGoogle } from "react-icons/fc";
-import { SmallAddIcon } from "@chakra-ui/icons";
 import {
   FaGlobe,
   FaHammer,
@@ -25,6 +24,7 @@ import {
   FaSignOutAlt,
   FaUser,
 } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 const NAV_LINKS = [
   {

@@ -1,7 +1,8 @@
-import Layout from "@/components/layout/Layout";
 import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { FaArrowRight } from "react-icons/fa";
+
+import Layout from "@/components/layout/Layout";
 
 const Home: NextPage = () => {
   return (

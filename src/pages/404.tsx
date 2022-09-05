@@ -1,5 +1,6 @@
-import Layout from "@/components/layout/Layout";
 import { Heading } from "@chakra-ui/react";
+
+import Layout from "@/components/layout/Layout";
 
 function Error404() {
   return (

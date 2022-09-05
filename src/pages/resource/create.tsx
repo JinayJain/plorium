@@ -1,5 +1,3 @@
-import Layout from "@/components/layout/Layout";
-import { trpc } from "@/util/trpc";
 import { SmallAddIcon } from "@chakra-ui/icons";
 import {
   Button,
@@ -10,12 +8,15 @@ import {
   Input,
   Select,
   Stack,
-  Textarea,
   Text,
+  Textarea,
 } from "@chakra-ui/react";
 import { ResourceType } from "@prisma/client";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
+
+import Layout from "@/components/layout/Layout";
+import { trpc } from "@/util/trpc";
 
 const ResourceTypeOptions = Object.keys(ResourceType).map((key) => ({
   value: key,
