@@ -11,7 +11,8 @@ function Resources({ resources }: InferNextProps<typeof getServerSideProps>) {
       <Stack spacing={4}>
         {resources.map((resource) => (
           <Box key={resource.id}>
-            <Link href={`/resource/${resource.id}`}>{resource.name}</Link>
+            <Link href={`/resource/${resource.id}`}>{resource.name}</Link> by{" "}
+            {resource.author.name}
           </Box>
         ))}
       </Stack>
@@ -20,7 +21,11 @@ function Resources({ resources }: InferNextProps<typeof getServerSideProps>) {
 }
 
 export async function getServerSideProps() {
-  const resources = await prisma.resource.findMany();
+  const resources = await prisma.resource.findMany({
+    include: {
+      author: true,
+    },
+  });
 
   return {
     props: {

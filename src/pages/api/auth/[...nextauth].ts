@@ -15,6 +15,17 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/login",
   },
+  callbacks: {
+    session(params) {
+      return {
+        ...params.session,
+        user: {
+          ...params.session.user,
+          id: params.user.id,
+        },
+      };
+    },
+  },
 };
 
 export default NextAuth(authOptions);

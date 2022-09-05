@@ -16,10 +16,10 @@ const Home: NextPage = () => {
             </Text>{" "}
             for your self-learning journey
           </Heading>
-          <Heading size="md" color="gray.600" fontWeight="normal" mb={8}>
+          <Text fontSize="xl" color="gray" mb={8}>
             Plorium helps you save hours of searching for resources, so you can
             spend more time learning.
-          </Heading>
+          </Text>
           <Button rightIcon={<FaArrowRight />} colorScheme="green">
             Start your journey
           </Button>

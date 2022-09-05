@@ -4,21 +4,30 @@ import { z } from "zod";
 
 import { prisma } from "@/util/server/db/prisma";
 
-const resourceRouter = trpc.router().mutation("create", {
+import { createRouter } from "../context";
+
+const resourceRouter = createRouter().mutation("create", {
   input: z.object({
     name: z.string(),
     description: z.string(),
     url: z.string().url(),
     type: z.nativeEnum(ResourceType),
   }),
-  async resolve({ input: { name, description, url, type } }) {
+  async resolve({ input: { name, description, url, type }, ctx }) {
+    if (!ctx.session) {
+      throw new trpc.TRPCError({
+        code: "UNAUTHORIZED",
+        message: "You must be signed in to create a resource",
+      });
+    }
+
     const resource = await prisma.resource.create({
       data: {
         name,
         description,
         url,
         type,
-        authorId: "cl7kgwch100060tqjaty9phsr", // TODO: get from session
+        authorId: ctx.session.user.id,
       },
     });
 
