@@ -5,7 +5,7 @@ const Home: NextPage = () => {
   return (
     <Box bg="gray.100" h="100vh">
       <Flex h="100%" w="100%" align="center" justify="center">
-        <Stack maxW="40%" spacing={4}>
+        <Stack maxW="1000px" mx={8} spacing={4}>
           <Heading>Plorium, the exploration emporium</Heading>
           <Text color="gray.600" fontSize="lg">
             Plorium aims to drastically simplify the self-learning process. We
