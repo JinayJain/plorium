@@ -1,36 +1,21 @@
-import { Box, Stack, Text } from "@chakra-ui/react";
-import { useCallback } from "react";
+import { Box, Button, HStack, Icon, Input, Stack } from "@chakra-ui/react";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import {
-  DragDropContext,
-  Draggable,
-  DropResult,
-  Droppable,
-} from "react-beautiful-dnd";
+  FieldValues,
+  UseFieldArrayAppend,
+  UseFormRegister,
+} from "react-hook-form";
+import { FaGratipay, FaGripVertical } from "react-icons/fa";
 
-const TEMP_DATA = [
-  {
-    id: "1",
-    name: "Learn HTML",
-    description: "Learn the basics of HTML",
-  },
-  {
-    id: "2",
-    name: "Learn CSS",
-    description: "CSS is the language for styling web pages",
-  },
-  {
-    id: "3",
-    name: "Learn JavaScript",
-    description:
-      "JavaScript is the programming language of the web used to make web pages interactive",
-  },
-];
-
-function Steps() {
-  const onDragEnd = useCallback((result: DropResult) => {
-    const { source, destination } = result;
-  }, []);
-
+function Steps({
+  fields,
+  register,
+  append,
+}: {
+  fields: Record<"id", string>[];
+  register: UseFormRegister<FieldValues>;
+  append: UseFieldArrayAppend<FieldValues, "steps">;
+}) {
   return (
     <Droppable droppableId="steps">
       {(droppableProvided) => (
@@ -38,23 +23,37 @@ function Steps() {
           ref={droppableProvided.innerRef}
           {...droppableProvided.droppableProps}
         >
-          {TEMP_DATA.map((step, index) => (
-            <Draggable key={step.id} draggableId={step.id} index={index}>
-              {(draggableProvided) => (
-                <Box
+          {fields.map((field, index) => (
+            <Draggable key={field.id} draggableId={field.id} index={index}>
+              {(draggableProvided, snapshot) => (
+                <HStack
+                  p={4}
+                  shadow="sm"
+                  bg={snapshot.isDragging ? "gray.100" : "white"}
                   ref={draggableProvided.innerRef}
                   {...draggableProvided.draggableProps}
-                  {...draggableProvided.dragHandleProps}
-                  p={8}
-                  border="1px solid"
-                  borderRadius="md"
                 >
-                  <Text>{step.name}</Text>
-                </Box>
+                  <Box
+                    {...draggableProvided.dragHandleProps}
+                    _hover={{
+                      bg: "gray.300",
+                    }}
+                  >
+                    <Icon as={FaGripVertical} />
+                  </Box>
+                  <Input {...register(`steps.${index}.name`)} />
+                </HStack>
               )}
             </Draggable>
           ))}
           {droppableProvided.placeholder}
+          <Button
+            onClick={() => {
+              append({ name: Math.random().toString() });
+            }}
+          >
+            Add Step
+          </Button>
         </Stack>
       )}
     </Droppable>

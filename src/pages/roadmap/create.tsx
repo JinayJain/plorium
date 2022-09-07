@@ -15,6 +15,7 @@ import {
   DropResult,
   resetServerContext,
 } from "react-beautiful-dnd";
+import { useFieldArray, useForm } from "react-hook-form";
 
 import Layout from "@/components/layout/Layout";
 
@@ -23,9 +24,26 @@ const Steps = dynamic(() => import("@/components/roadmap/Steps"), {
 });
 
 function CreateRoadmap() {
-  const onDragEnd = useCallback((result: DropResult) => {
-    const { source, destination } = result;
-  }, []);
+  const { control, register } = useForm();
+  const { fields, append, move } = useFieldArray({
+    control,
+    name: "steps",
+  });
+
+  const onDragEnd = useCallback(
+    (result: DropResult) => {
+      const { source, destination } = result;
+
+      console.log({ source, destination });
+
+      if (!destination) {
+        return;
+      }
+
+      move(source.index, destination.index);
+    },
+    [move],
+  );
 
   return (
     <Layout>
@@ -45,7 +63,7 @@ function CreateRoadmap() {
 
         <Heading size="lg">Steps</Heading>
         <DragDropContext onDragEnd={onDragEnd}>
-          <Steps />
+          <Steps fields={fields} register={register} append={append} />
         </DragDropContext>
       </form>
     </Layout>
