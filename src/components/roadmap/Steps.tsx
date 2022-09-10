@@ -44,7 +44,12 @@ const ResourceBlock = forwardRef<BoxProps, "div">((props, ref) => {
           <ModalHeader>Create a Resource</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <CreateResourceForm onSubmit={() => null} />
+            <CreateResourceForm
+              onSubmit={async () => {
+                console.log("submit");
+              }}
+              isLoading={false}
+            />
           </ModalBody>
           <ModalFooter></ModalFooter>
         </ModalContent>
