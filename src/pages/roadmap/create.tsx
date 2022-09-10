@@ -9,13 +9,7 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
-import { useCallback } from "react";
-import {
-  DragDropContext,
-  DropResult,
-  resetServerContext,
-} from "react-beautiful-dnd";
-import { useFieldArray, useForm } from "react-hook-form";
+import { DragDropContext, resetServerContext } from "react-beautiful-dnd";
 
 import Layout from "@/components/layout/Layout";
 
@@ -24,27 +18,6 @@ const Steps = dynamic(() => import("@/components/roadmap/Steps"), {
 });
 
 function CreateRoadmap() {
-  const { control, register } = useForm();
-  const { fields, append, move } = useFieldArray({
-    control,
-    name: "steps",
-  });
-
-  const onDragEnd = useCallback(
-    (result: DropResult) => {
-      const { source, destination } = result;
-
-      console.log({ source, destination });
-
-      if (!destination) {
-        return;
-      }
-
-      move(source.index, destination.index);
-    },
-    [move],
-  );
-
   return (
     <Layout>
       <Heading>Create Roadmap</Heading>
@@ -62,8 +35,8 @@ function CreateRoadmap() {
         </Stack>
 
         <Heading size="lg">Steps</Heading>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Steps fields={fields} register={register} append={append} />
+        <DragDropContext onDragEnd={() => null}>
+          <Steps />
         </DragDropContext>
       </form>
     </Layout>
