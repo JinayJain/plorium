@@ -78,6 +78,7 @@ model RoadmapBlock {
   roadmapId  Int
   type       RoadmapBlockType
   resourceId Int?
+  note       String?
 
   createdAt DateTime @default(now())
 
@@ -86,6 +87,7 @@ model RoadmapBlock {
 
 enum RoadmapBlockType {
   RESOURCE
+  NOTE
 }
 
 model RoadmapLearner {

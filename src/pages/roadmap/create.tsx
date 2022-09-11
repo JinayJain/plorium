@@ -13,7 +13,7 @@ import { DragDropContext, resetServerContext } from "react-beautiful-dnd";
 
 import Layout from "@/components/layout/Layout";
 
-const Steps = dynamic(() => import("@/components/roadmap/Steps"), {
+const BlockEditor = dynamic(() => import("@/components/roadmap/BlockEditor"), {
   ssr: false,
 });
 
@@ -36,7 +36,7 @@ function CreateRoadmap() {
 
         <Heading size="lg">Steps</Heading>
         <DragDropContext onDragEnd={() => null}>
-          <Steps />
+          <BlockEditor />
         </DragDropContext>
       </form>
     </Layout>
