@@ -13,10 +13,8 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ResourceType } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import Layout from "@/components/layout/Layout";
 import {

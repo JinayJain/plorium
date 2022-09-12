@@ -12,6 +12,7 @@ import {
   FormHelperText,
   FormLabel,
   HStack,
+  Heading,
   Input,
   Modal,
   ModalBody,
@@ -27,13 +28,14 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  Text,
   Textarea,
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RoadmapBlockType } from "@prisma/client";
-import { useCallback, useState } from "react";
+import { Resource, RoadmapBlockType } from "@prisma/client";
+import { useCallback, useId, useState } from "react";
 import { UseFormReturn, useForm } from "react-hook-form";
 
 import {
@@ -42,9 +44,11 @@ import {
   createResourceSchema,
 } from "@/util/forms/create-resource";
 
-type Block = {
+type ResourceBlockData = Pick<
+  Resource,
+  "name" | "description" | "url" | "type"
+> & {
   id: string;
-  type: RoadmapBlockType;
 };
 
 const ResourceBlockCreator = ({
@@ -111,10 +115,21 @@ const NoteBlockCreator = () => {
   return <Box>Note</Box>;
 };
 
+const ResourceBlock = ({ block }: { block: ResourceBlockData }) => {
+  return (
+    <Box w="full" p={4} bg="gray.100" borderRadius="md">
+      <Heading size="md">{block.name}</Heading>
+      <Text>{block.description}</Text>
+    </Box>
+  );
+};
+
 function BlockEditor() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [blocks, setBlocks] = useState<Block[]>([]);
+  const [blocks, setBlocks] = useState<ResourceBlockData[]>([]);
   const [activeTab, setActiveTab] = useState(0);
+
+  const id = useId();
 
   const resourceForm = useForm<CreateResourceFormValues>({
     resolver: zodResolver(createResourceSchema),
@@ -133,19 +148,29 @@ function BlockEditor() {
     },
   ];
 
+  const generateId = useCallback(() => {
+    return `new-${Date.now()}`;
+  }, []);
+
   const onResourceSubmit = useCallback(
     (values: CreateResourceFormValues) => {
+      setBlocks(
+        blocks.concat({
+          ...values,
+          id: generateId(),
+        }),
+      );
       resourceForm.reset();
       onClose();
     },
-    [onClose, resourceForm],
+    [onClose, resourceForm, generateId, blocks],
   );
 
   return (
     <Box>
       <VStack>
-        {blocks.map((block, index) => (
-          <Box key={index}>block</Box>
+        {blocks.map((block) => (
+          <ResourceBlock key={block.id} block={block} />
         ))}
         <Button
           rightIcon={<SmallAddIcon />}
