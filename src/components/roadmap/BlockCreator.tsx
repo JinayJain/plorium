@@ -183,7 +183,9 @@ function BlockCreator({
         </ModalBody>
         <ModalFooter>
           <HStack spacing={4}>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button onClick={onClose} variant="outline">
+              Cancel
+            </Button>
             <Button
               colorScheme="green"
               onClick={resourceForm.handleSubmit(onSubmit)}
