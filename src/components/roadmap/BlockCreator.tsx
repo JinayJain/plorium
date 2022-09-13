@@ -1,4 +1,3 @@
-import { SmallAddIcon } from "@chakra-ui/icons";
 import {
   Accordion,
   AccordionButton,
@@ -12,7 +11,6 @@ import {
   FormHelperText,
   FormLabel,
   HStack,
-  Heading,
   Input,
   Modal,
   ModalBody,
@@ -28,28 +26,19 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-  Text,
   Textarea,
-  VStack,
-  useDisclosure,
 } from "@chakra-ui/react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Resource, RoadmapBlockType } from "@prisma/client";
-import { useCallback, useId, useState } from "react";
-import { UseFormReturn, useForm } from "react-hook-form";
+import { RoadmapBlockType } from "@prisma/client";
+import { useEffect, useState } from "react";
+import { UseFormReturn } from "react-hook-form";
 
+import { ResourceBlockData } from "@/pages/roadmap/create";
 import {
   CreateResourceFormValues,
   ResourceTypeOptions,
-  createResourceSchema,
+  defaultCreateResourceFormValues,
+  useCreateResourceForm,
 } from "@/util/forms/create-resource";
-
-type ResourceBlockData = Pick<
-  Resource,
-  "name" | "description" | "url" | "type"
-> & {
-  id: string;
-};
 
 const ResourceBlockCreator = ({
   form: {
@@ -102,7 +91,7 @@ const ResourceBlockCreator = ({
               <AccordionIcon />
             </AccordionButton>
             <AccordionPanel>
-              <Box>TODO</Box>
+              <Box>TODO: Suggest similar resources</Box>
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
@@ -112,28 +101,32 @@ const ResourceBlockCreator = ({
 };
 
 const NoteBlockCreator = () => {
-  return <Box>Note</Box>;
+  return <Box>TODO: Note Creator Form</Box>;
 };
 
-const ResourceBlock = ({ block }: { block: ResourceBlockData }) => {
-  return (
-    <Box w="full" p={4} bg="gray.100" borderRadius="md">
-      <Heading size="md">{block.name}</Heading>
-      <Text>{block.description}</Text>
-    </Box>
-  );
-};
-
-function BlockEditor() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [blocks, setBlocks] = useState<ResourceBlockData[]>([]);
+function BlockCreator({
+  isOpen,
+  onClose,
+  onCreate,
+  onEdit,
+  block,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onCreate: (block: ResourceBlockData) => void;
+  onEdit: (block: ResourceBlockData) => void;
+  block?: ResourceBlockData;
+}) {
   const [activeTab, setActiveTab] = useState(0);
+  const resourceForm = useCreateResourceForm();
 
-  const id = useId();
+  const changeVerb = block ? "Update" : "Create";
 
-  const resourceForm = useForm<CreateResourceFormValues>({
-    resolver: zodResolver(createResourceSchema),
-  });
+  useEffect(() => {
+    if (isOpen) {
+      resourceForm.reset(block ?? defaultCreateResourceFormValues);
+    }
+  }, [isOpen, block, resourceForm]);
 
   const creatorTabs = [
     {
@@ -148,73 +141,60 @@ function BlockEditor() {
     },
   ];
 
-  const generateId = useCallback(() => {
-    return `new-${Date.now()}`;
-  }, []);
+  const generateId = () => {
+    return `block-${new Date().getTime()}`;
+  };
 
-  const onResourceSubmit = useCallback(
-    (values: CreateResourceFormValues) => {
-      setBlocks(
-        blocks.concat({
-          ...values,
-          id: generateId(),
-        }),
-      );
-      resourceForm.reset();
-      onClose();
-    },
-    [onClose, resourceForm, generateId, blocks],
-  );
+  const onSubmit = (values: CreateResourceFormValues) => {
+    if (block) {
+      onEdit({
+        ...block,
+        ...values,
+      });
+    } else {
+      onCreate({
+        id: generateId(),
+        ...values,
+      });
+    }
+
+    onClose();
+  };
 
   return (
-    <Box>
-      <VStack>
-        {blocks.map((block) => (
-          <ResourceBlock key={block.id} block={block} />
-        ))}
-        <Button
-          rightIcon={<SmallAddIcon />}
-          colorScheme="green"
-          onClick={onOpen}
-        >
-          Add
-        </Button>
-      </VStack>
-
-      <Modal isOpen={isOpen} onClose={onClose} size="3xl" closeOnEsc={false}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add Block</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Tabs colorScheme="green" index={activeTab} onChange={setActiveTab}>
-              <TabList>
-                {creatorTabs.map(({ label }, index) => (
-                  <Tab key={index}>{label}</Tab>
-                ))}
-              </TabList>
-              <TabPanels>
-                {creatorTabs.map(({ component }, index) => (
-                  <TabPanel key={index}>{component}</TabPanel>
-                ))}
-              </TabPanels>
-            </Tabs>
-          </ModalBody>
-          <ModalFooter>
-            <HStack spacing={4}>
-              <Button onClick={onClose}>Cancel</Button>
-              <Button
-                colorScheme="green"
-                onClick={resourceForm.handleSubmit(onResourceSubmit)}
-              >
-                Add
-              </Button>
-            </HStack>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </Box>
+    <Modal isOpen={isOpen} onClose={onClose} size="3xl" closeOnEsc={false}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>{changeVerb} Block</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <Tabs colorScheme="green" index={activeTab} onChange={setActiveTab}>
+            <TabList>
+              {creatorTabs.map(({ label }, index) => (
+                <Tab key={index}>{label}</Tab>
+              ))}
+            </TabList>
+            <TabPanels>
+              {creatorTabs.map(({ component }, index) => (
+                <TabPanel key={index}>{component}</TabPanel>
+              ))}
+            </TabPanels>
+          </Tabs>
+        </ModalBody>
+        <ModalFooter>
+          <HStack spacing={4}>
+            <Button onClick={onClose}>Cancel</Button>
+            <Button
+              colorScheme="green"
+              onClick={resourceForm.handleSubmit(onSubmit)}
+            >
+              {changeVerb}
+            </Button>
+          </HStack>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 }
 
-export default BlockEditor;
+export default BlockCreator;

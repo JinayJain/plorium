@@ -1,4 +1,6 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ResourceType } from "@prisma/client";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export const ResourceTypeOptions = Object.keys(ResourceType).map((key) => ({
@@ -15,3 +17,17 @@ export const createResourceSchema = z.object({
 });
 
 export type CreateResourceFormValues = z.infer<typeof createResourceSchema>;
+
+export const defaultCreateResourceFormValues: CreateResourceFormValues = {
+  name: "",
+  description: "",
+  type: ResourceTypeOptions[0].value as ResourceType,
+  url: "",
+};
+
+export const useCreateResourceForm = () => {
+  return useForm<CreateResourceFormValues>({
+    resolver: zodResolver(createResourceSchema),
+    defaultValues: defaultCreateResourceFormValues,
+  });
+};

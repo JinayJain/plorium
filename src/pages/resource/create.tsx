@@ -21,6 +21,7 @@ import {
   CreateResourceFormValues,
   ResourceTypeOptions,
   createResourceSchema,
+  useCreateResourceForm,
 } from "@/util/forms/create-resource";
 import { trpc } from "@/util/trpc";
 
@@ -34,9 +35,7 @@ function CreateResource() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<CreateResourceFormValues>({
-    resolver: zodResolver(createResourceSchema),
-  });
+  } = useCreateResourceForm();
 
   const onSubmit = async (values: CreateResourceFormValues) => {
     const resource = await createResourceMutation.mutateAsync(values);
