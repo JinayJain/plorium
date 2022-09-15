@@ -6,12 +6,15 @@ import {
   AccordionPanel,
   Box,
   Button,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
   HStack,
+  Heading,
   Input,
+  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -39,11 +42,51 @@ import {
   defaultCreateResourceFormValues,
   useCreateResourceForm,
 } from "@/util/forms/create-resource";
+import useDebounce from "@/util/hooks/useDebounce";
+import { trpc } from "@/util/trpc";
+
+const ResourceSuggestions = ({ query }: { query: string }) => {
+  const debouncedQuery = useDebounce(query, 500);
+  const { data: suggestions } = trpc.useQuery([
+    "resource.suggestions",
+    debouncedQuery,
+  ]);
+
+  useEffect(() => {
+    console.log(debouncedQuery);
+  }, [debouncedQuery]);
+
+  return (
+    <Stack spacing={4}>
+      {suggestions &&
+        suggestions.map((suggestion) => (
+          <Flex key={suggestion.id}>
+            <Box flex={1}>
+              <Heading size="sm">{suggestion.name}</Heading>
+              <Link
+                href={suggestion.url}
+                isExternal
+                fontSize="sm"
+                color="gray.500"
+              >
+                {suggestion.url}
+              </Link>
+            </Box>
+
+            <Button colorScheme="green" size="sm" variant="outline">
+              Select
+            </Button>
+          </Flex>
+        ))}
+    </Stack>
+  );
+};
 
 const ResourceBlockCreator = ({
   form: {
     register,
     formState: { errors },
+    watch,
   },
 }: {
   form: UseFormReturn<CreateResourceFormValues>;
@@ -53,7 +96,7 @@ const ResourceBlockCreator = ({
       <Stack spacing={4}>
         <FormControl isInvalid={!!errors.name} isRequired>
           <FormLabel>Name</FormLabel>
-          <Input type="text" {...register("name")} />
+          <Input type="text" {...register("name")} autoFocus />
           <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
         </FormControl>
         <FormControl isInvalid={!!errors.url} isRequired>
@@ -90,8 +133,8 @@ const ResourceBlockCreator = ({
               </Box>
               <AccordionIcon />
             </AccordionButton>
-            <AccordionPanel>
-              <Box>TODO: Suggest similar resources</Box>
+            <AccordionPanel maxH="200px" overflowY="auto">
+              <ResourceSuggestions query={watch("name")} />
             </AccordionPanel>
           </AccordionItem>
         </Accordion>

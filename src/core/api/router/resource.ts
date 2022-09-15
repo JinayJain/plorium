@@ -6,33 +6,50 @@ import { prisma } from "@/util/server/db/prisma";
 
 import { createRouter } from "../context";
 
-const resourceRouter = createRouter().mutation("create", {
-  input: z.object({
-    name: z.string(),
-    description: z.string(),
-    url: z.string().url(),
-    type: z.nativeEnum(ResourceType),
-  }),
-  async resolve({ input: { name, description, url, type }, ctx }) {
-    if (!ctx.session) {
-      throw new trpc.TRPCError({
-        code: "UNAUTHORIZED",
-        message: "You must be signed in to create a resource",
+const resourceRouter = createRouter()
+  .mutation("create", {
+    input: z.object({
+      name: z.string(),
+      description: z.string(),
+      url: z.string().url(),
+      type: z.nativeEnum(ResourceType),
+    }),
+    async resolve({ input: { name, description, url, type }, ctx }) {
+      if (!ctx.session) {
+        throw new trpc.TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You must be signed in to create a resource",
+        });
+      }
+
+      const resource = await prisma.resource.create({
+        data: {
+          name,
+          description,
+          url,
+          type,
+          authorId: ctx.session.user.id,
+        },
       });
-    }
 
-    const resource = await prisma.resource.create({
-      data: {
-        name,
-        description,
-        url,
-        type,
-        authorId: ctx.session.user.id,
-      },
-    });
+      return resource;
+    },
+  })
+  .query("suggestions", {
+    input: z.string(),
+    async resolve({ input: query }) {
+      const resources = await prisma.resource.findMany({
+        where: {
+          name: {
+            contains: query,
+            mode: "insensitive",
+          },
+        },
+        take: 5,
+      });
 
-    return resource;
-  },
-});
+      return resources;
+    },
+  });
 
 export default resourceRouter;

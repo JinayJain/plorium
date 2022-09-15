@@ -6,6 +6,7 @@ import {
   Flex,
   HStack,
   Heading,
+  Icon,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -18,6 +19,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { Draggable, Droppable } from "react-beautiful-dnd";
+import { FaGripVertical } from "react-icons/fa";
 
 import { ResourceBlockData } from "@/pages/roadmap/create";
 
@@ -41,7 +44,7 @@ const DeleteButton = ({
         <PopoverContent>
           <PopoverArrow />
           <PopoverCloseButton />
-          <PopoverBody>Are you sure you want to delete this block?</PopoverBody>
+          <PopoverBody>{dialog}</PopoverBody>
           <PopoverFooter display="flex" justifyContent="flex-end">
             <ButtonGroup>
               <Button size="sm" variant="outline" onClick={onClose}>
@@ -115,30 +118,80 @@ function RoadmapEditor({
   return (
     <Box>
       <VStack>
-        {blocks.map((block, index) => (
-          <ResourceBlock
-            key={block.id}
-            block={block}
-            onEdit={() => {
-              setEditContext({ index, block });
+        <Droppable droppableId="roadmap">
+          {(provided) => (
+            <Box ref={provided.innerRef} {...provided.droppableProps} w="full">
+              {blocks.map((block, index) => (
+                <Draggable draggableId={block.id} index={index} key={block.id}>
+                  {(provided) => (
+                    <Flex
+                      w="full"
+                      mb={4}
+                      key={block.id}
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                    >
+                      <Flex w={8} align="center" justify="center">
+                        <Box
+                          {...provided.dragHandleProps}
+                          p={1}
+                          _hover={{
+                            bg: "gray.200",
+                          }}
+                        >
+                          <Icon as={FaGripVertical} />
+                        </Box>
+                      </Flex>
+                      <ResourceBlock
+                        key={block.id}
+                        block={block}
+                        onEdit={() => {
+                          setEditContext({ index, block });
+                          onOpen();
+                        }}
+                        onDelete={() => onDelete(index)}
+                      />
+                    </Flex>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </Box>
+          )}
+        </Droppable>
+
+        <ButtonGroup>
+          <Button
+            rightIcon={<SmallAddIcon />}
+            colorScheme="green"
+            onClick={() => {
+              setEditContext({
+                index: blocks.length,
+                block: undefined,
+              });
               onOpen();
             }}
-            onDelete={() => onDelete(index)}
-          />
-        ))}
-        <Button
-          rightIcon={<SmallAddIcon />}
-          colorScheme="green"
-          onClick={() => {
-            setEditContext({
-              index: blocks.length,
-              block: undefined,
-            });
-            onOpen();
-          }}
-        >
-          Add
-        </Button>
+          >
+            Add
+          </Button>
+
+          <Button
+            onClick={() => {
+              onCreate(
+                {
+                  id: `temp-${blocks.length}-${new Date().getTime()}`,
+                  name: `Block ${blocks.length + 1}`,
+                  description: "This is a new block",
+                  url: "https://google.com",
+                  type: "PAPER",
+                },
+                blocks.length,
+              );
+            }}
+          >
+            temp add
+          </Button>
+        </ButtonGroup>
 
         <BlockCreator
           isOpen={isOpen}
