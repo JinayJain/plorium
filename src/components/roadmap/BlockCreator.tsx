@@ -8,6 +8,7 @@ import {
   Button,
   Flex,
   FormControl,
+  FormControlOptions,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
@@ -42,45 +43,8 @@ import {
   defaultCreateResourceFormValues,
   useCreateResourceForm,
 } from "@/util/forms/create-resource";
-import useDebounce from "@/util/hooks/useDebounce";
-import { trpc } from "@/util/trpc";
 
-const ResourceSuggestions = ({ query }: { query: string }) => {
-  const debouncedQuery = useDebounce(query, 500);
-  const { data: suggestions } = trpc.useQuery([
-    "resource.suggestions",
-    debouncedQuery,
-  ]);
-
-  useEffect(() => {
-    console.log(debouncedQuery);
-  }, [debouncedQuery]);
-
-  return (
-    <Stack spacing={4}>
-      {suggestions &&
-        suggestions.map((suggestion) => (
-          <Flex key={suggestion.id}>
-            <Box flex={1}>
-              <Heading size="sm">{suggestion.name}</Heading>
-              <Link
-                href={suggestion.url}
-                isExternal
-                fontSize="sm"
-                color="gray.500"
-              >
-                {suggestion.url}
-              </Link>
-            </Box>
-
-            <Button colorScheme="green" size="sm" variant="outline">
-              Select
-            </Button>
-          </Flex>
-        ))}
-    </Stack>
-  );
-};
+import ResourceSuggestions from "../resource/ResourceSuggestions";
 
 const ResourceBlockCreator = ({
   form: {
@@ -88,24 +52,34 @@ const ResourceBlockCreator = ({
     formState: { errors },
     watch,
   },
+  exists = false,
 }: {
   form: UseFormReturn<CreateResourceFormValues>;
+  exists?: boolean;
 }) => {
+  const getControlProps = (
+    name: keyof CreateResourceFormValues,
+  ): FormControlOptions => ({
+    isInvalid: !!errors[name],
+    isDisabled: exists,
+    isRequired: true,
+  });
+
   return (
     <form noValidate>
       <Stack spacing={4}>
-        <FormControl isInvalid={!!errors.name} isRequired>
+        <FormControl {...getControlProps("name")}>
           <FormLabel>Name</FormLabel>
           <Input type="text" {...register("name")} autoFocus />
           <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
         </FormControl>
-        <FormControl isInvalid={!!errors.url} isRequired>
+        <FormControl {...getControlProps("url")}>
           <FormLabel>URL</FormLabel>
           <Input type="url" {...register("url")} />
           <FormHelperText>https://example.com/resource</FormHelperText>
           <FormErrorMessage>{errors.url?.message}</FormErrorMessage>
         </FormControl>
-        <FormControl isInvalid={!!errors.description} isRequired>
+        <FormControl {...getControlProps("description")}>
           <FormLabel>Description</FormLabel>
           <Textarea {...register("description")} />
           <FormHelperText>
@@ -113,7 +87,7 @@ const ResourceBlockCreator = ({
           </FormHelperText>
           <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
         </FormControl>
-        <FormControl isInvalid={!!errors.type} isRequired>
+        <FormControl {...getControlProps("type")}>
           <FormLabel>Resource Type</FormLabel>
           <Select {...register("type")}>
             {ResourceTypeOptions.map(({ value, label }) => (
@@ -134,7 +108,12 @@ const ResourceBlockCreator = ({
               <AccordionIcon />
             </AccordionButton>
             <AccordionPanel maxH="200px" overflowY="auto">
-              <ResourceSuggestions query={watch("name")} />
+              <ResourceSuggestions
+                query={watch("name")}
+                onSelect={(resource) => {
+                  console.log(resource);
+                }}
+              />
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
@@ -197,6 +176,7 @@ function BlockCreator({
     } else {
       onCreate({
         id: generateId(),
+        existing: false,
         ...values,
       });
     }

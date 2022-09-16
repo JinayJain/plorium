@@ -1,6 +1,9 @@
+import { SmallAddIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Button,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
   Input,
@@ -9,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { Resource } from "@prisma/client";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import {
   DragDropContext,
   DropResult,
@@ -17,6 +20,7 @@ import {
 } from "react-beautiful-dnd";
 
 import Layout from "@/components/layout/Layout";
+import { useCreateResourceForm } from "@/util/forms/create-resource";
 
 const RoadmapEditor = dynamic(
   () => import("@/components/roadmap/RoadmapEditor"),
@@ -30,11 +34,16 @@ export type ResourceBlockData = Pick<
   "name" | "description" | "url" | "type"
 > & {
   id: string;
+  existing: boolean;
 };
 
-function Blocks() {
-  const [blocks, setBlocks] = useState<ResourceBlockData[]>([]);
-
+function Blocks({
+  blocks,
+  setBlocks,
+}: {
+  blocks: ResourceBlockData[];
+  setBlocks: Dispatch<SetStateAction<ResourceBlockData[]>>;
+}) {
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
@@ -79,24 +88,36 @@ function Blocks() {
 }
 
 function CreateRoadmap() {
+  const [blocks, setBlocks] = useState<ResourceBlockData[]>([]);
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useCreateResourceForm();
+
   return (
     <Layout>
       <Heading>Create Roadmap</Heading>
 
       <form noValidate>
         <Stack>
-          <FormControl isRequired>
+          <FormControl isRequired isInvalid={!!errors.name}>
             <FormLabel>Name</FormLabel>
-            <Input type="text" />
+            <Input type="text" {...register("name")} />
+            <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
           </FormControl>
-          <FormControl isRequired>
+          <FormControl isRequired isInvalid={!!errors.description}>
             <FormLabel>Description</FormLabel>
-            <Textarea />
+            <Textarea {...register("description")} />
+            <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
           </FormControl>
         </Stack>
       </form>
 
-      <Blocks />
+      <Blocks blocks={blocks} setBlocks={setBlocks} />
+
+      <Button leftIcon={<SmallAddIcon />}>Create</Button>
     </Layout>
   );
 }

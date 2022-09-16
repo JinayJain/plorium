@@ -91,6 +91,7 @@ const ResourceBlock = ({
           />
         </HStack>
       </Flex>
+
       <Text>{block.description}</Text>
     </Box>
   );
@@ -123,7 +124,7 @@ function RoadmapEditor({
             <Box ref={provided.innerRef} {...provided.droppableProps} w="full">
               {blocks.map((block, index) => (
                 <Draggable draggableId={block.id} index={index} key={block.id}>
-                  {(provided) => (
+                  {(provided, snapshot) => (
                     <Flex
                       w="full"
                       mb={4}
@@ -138,6 +139,7 @@ function RoadmapEditor({
                           _hover={{
                             bg: "gray.200",
                           }}
+                          bg={snapshot.isDragging ? "gray.200" : undefined}
                         >
                           <Icon as={FaGripVertical} />
                         </Box>
@@ -160,38 +162,19 @@ function RoadmapEditor({
           )}
         </Droppable>
 
-        <ButtonGroup>
-          <Button
-            rightIcon={<SmallAddIcon />}
-            colorScheme="green"
-            onClick={() => {
-              setEditContext({
-                index: blocks.length,
-                block: undefined,
-              });
-              onOpen();
-            }}
-          >
-            Add
-          </Button>
-
-          <Button
-            onClick={() => {
-              onCreate(
-                {
-                  id: `temp-${blocks.length}-${new Date().getTime()}`,
-                  name: `Block ${blocks.length + 1}`,
-                  description: "This is a new block",
-                  url: "https://google.com",
-                  type: "PAPER",
-                },
-                blocks.length,
-              );
-            }}
-          >
-            temp add
-          </Button>
-        </ButtonGroup>
+        <Button
+          rightIcon={<SmallAddIcon />}
+          colorScheme="green"
+          onClick={() => {
+            setEditContext({
+              index: blocks.length,
+              block: undefined,
+            });
+            onOpen();
+          }}
+        >
+          Add
+        </Button>
 
         <BlockCreator
           isOpen={isOpen}

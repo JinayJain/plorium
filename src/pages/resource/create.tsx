@@ -1,5 +1,11 @@
 import { SmallAddIcon } from "@chakra-ui/icons";
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
   Button,
   FormControl,
   FormErrorMessage,
@@ -17,6 +23,7 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 
 import Layout from "@/components/layout/Layout";
+import ResourceSuggestions from "@/components/resource/ResourceSuggestions";
 import {
   CreateResourceFormValues,
   ResourceTypeOptions,
@@ -32,6 +39,7 @@ function CreateResource() {
 
   const {
     register,
+    watch,
     handleSubmit,
     reset,
     formState: { errors },
@@ -84,6 +92,26 @@ function CreateResource() {
             </Select>
             <FormErrorMessage>{errors.type?.message}</FormErrorMessage>
           </FormControl>
+
+          <Accordion defaultIndex={0} allowToggle>
+            <AccordionItem>
+              <AccordionButton>
+                <Box flex="1" textAlign="left">
+                  Similar Resources
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+              <AccordionPanel maxH="200px" overflowY="auto">
+                <ResourceSuggestions
+                  query={watch("name")}
+                  onSelect={(resource) => {
+                    console.log(resource);
+                  }}
+                />
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+
           <Button leftIcon={<SmallAddIcon />} colorScheme="green" type="submit">
             Create Resource
           </Button>
