@@ -1,5 +1,14 @@
 import { ArrowForwardIcon } from "@chakra-ui/icons";
-import { Box, Heading, Link, Stack, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Heading,
+  Link,
+  SimpleGrid,
+  Stack,
+  Tag,
+  Text,
+} from "@chakra-ui/react";
 import { GetServerSidePropsContext } from "next";
 import NextLink from "next/link";
 
@@ -14,7 +23,10 @@ function ViewResource({
   return (
     <Layout>
       <Box mt={8}>
-        <Heading size="2xl" mb={2}>
+        <Tag size="md" colorScheme="yellow">
+          {resource.type}
+        </Tag>
+        <Heading size="2xl" my={2}>
           {resource.title}
         </Heading>
         <Link
@@ -27,26 +39,37 @@ function ViewResource({
         >
           {resource.url} <ArrowForwardIcon />
         </Link>
-        <Text color="gray" mt={2}>
-          CONTRIBUTED BY{" "}
-          <Text as="span" fontWeight="bold" color="black">
-            {resource.author.name}
-          </Text>
-        </Text>
+
         <Text fontSize="lg" my={4}>
           {resource.description}
         </Text>
 
-        <Heading size="md">Found in</Heading>
-        <Stack>
-          {roadmaps.map((roadmap) => (
-            <NextLink href={`/roadmap/${roadmap.id}`} key={roadmap.id} passHref>
-              <Link fontSize="xl" color="gray" w="fit-content">
-                {roadmap.title} <ArrowForwardIcon />
-              </Link>
-            </NextLink>
-          ))}
-        </Stack>
+        <Text color="gray">
+          CONTRIBUTED BY{" "}
+          <Avatar size="xs" ml={2} src={resource.author.image ?? ""} />{" "}
+          <Text as="span" fontWeight="bold" color="black">
+            {resource.author.name}
+          </Text>
+        </Text>
+        <Box mt={12}>
+          <Heading size="md">Roadmaps with this resource</Heading>
+
+          <SimpleGrid minChildWidth="300px" spacing={4} mt={4}>
+            {roadmaps.map((roadmap) => (
+              <Box key={roadmap.id} p={4} borderWidth="1px" borderRadius="md">
+                <NextLink href={`/roadmap/${roadmap.id}`} passHref>
+                  <Link>
+                    <Heading size="sm">{roadmap.title}</Heading>
+                  </Link>
+                </NextLink>
+
+                <Text color="gray" mt={2}>
+                  {roadmap.description}
+                </Text>
+              </Box>
+            ))}
+          </SimpleGrid>
+        </Box>
       </Box>
     </Layout>
   );

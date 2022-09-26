@@ -12,7 +12,7 @@ function Roadmap({
   blocks,
 }: InferNextProps<typeof getServerSideProps>) {
   return (
-    <Layout>
+    <Layout variant="bare">
       <Heading>{title}</Heading>
       <Heading size="md">by {author.name}</Heading>
       <Text>{description}</Text>
