@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "RoadmapBlockType" AS ENUM ('RESOURCE');
+CREATE TYPE "ResourceType" AS ENUM ('VIDEO', 'BLOG', 'TUTORIAL', 'DOCUMENT', 'PAPER');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -16,9 +16,10 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Resource" (
     "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "url" TEXT NOT NULL,
+    "type" "ResourceType" NOT NULL,
     "authorId" TEXT NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -29,7 +30,7 @@ CREATE TABLE "Resource" (
 -- CreateTable
 CREATE TABLE "Roadmap" (
     "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "authorId" TEXT NOT NULL,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -39,14 +40,31 @@ CREATE TABLE "Roadmap" (
 );
 
 -- CreateTable
-CREATE TABLE "RoadmapBlock" (
+CREATE TABLE "Block" (
     "id" SERIAL NOT NULL,
     "roadmapId" INTEGER NOT NULL,
-    "type" "RoadmapBlockType" NOT NULL,
-    "resourceId" INTEGER,
+    "order" INTEGER NOT NULL,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "RoadmapBlock_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Block_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ResourceBlock" (
+    "id" INTEGER NOT NULL,
+    "resourceId" INTEGER NOT NULL,
+
+    CONSTRAINT "ResourceBlock_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "NoteBlock" (
+    "id" INTEGER NOT NULL,
+    "title" TEXT,
+    "content" TEXT NOT NULL,
+
+    CONSTRAINT "NoteBlock_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -116,7 +134,16 @@ ALTER TABLE "Resource" ADD CONSTRAINT "Resource_authorId_fkey" FOREIGN KEY ("aut
 ALTER TABLE "Roadmap" ADD CONSTRAINT "Roadmap_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "RoadmapBlock" ADD CONSTRAINT "RoadmapBlock_resourceId_fkey" FOREIGN KEY ("resourceId") REFERENCES "Resource"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Block" ADD CONSTRAINT "Block_roadmapId_fkey" FOREIGN KEY ("roadmapId") REFERENCES "Roadmap"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ResourceBlock" ADD CONSTRAINT "ResourceBlock_id_fkey" FOREIGN KEY ("id") REFERENCES "Block"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ResourceBlock" ADD CONSTRAINT "ResourceBlock_resourceId_fkey" FOREIGN KEY ("resourceId") REFERENCES "Resource"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "NoteBlock" ADD CONSTRAINT "NoteBlock_id_fkey" FOREIGN KEY ("id") REFERENCES "Block"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "RoadmapLearner" ADD CONSTRAINT "RoadmapLearner_roadmapId_fkey" FOREIGN KEY ("roadmapId") REFERENCES "Roadmap"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

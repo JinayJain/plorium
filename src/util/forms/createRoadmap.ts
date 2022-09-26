@@ -1,21 +1,24 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { UseFormProps, useForm } from "react-hook-form";
 import { z } from "zod";
 
 export const createRoadmapSchema = z.object({
-  name: z.string().min(1).max(255),
+  title: z.string().min(1).max(255),
   description: z.string().min(1),
 });
 
 export type CreateRoadmapFormValues = z.infer<typeof createRoadmapSchema>;
 
 export const defaultCreateRoadmapFormValues: CreateRoadmapFormValues = {
-  name: "",
+  title: "",
   description: "",
 };
 
-export const useCreateRoadmapForm = () => {
+export const useCreateRoadmapForm = (
+  props?: UseFormProps<CreateRoadmapFormValues>,
+) => {
   return useForm<CreateRoadmapFormValues>({
+    ...props,
     resolver: zodResolver(createRoadmapSchema),
     defaultValues: defaultCreateRoadmapFormValues,
   });

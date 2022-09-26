@@ -18,18 +18,14 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
 
 import Layout from "@/components/layout/Layout";
-import ResourceSuggestions from "@/components/resource/ResourceSuggestions";
 import {
   CreateResourceFormValues,
   ResourceTypeOptions,
-  createResourceSchema,
   useCreateResourceForm,
-} from "@/util/forms/create-resource";
+} from "@/util/forms/createResource";
 import { trpc } from "@/util/trpc";
 
 function CreateResource() {
@@ -62,10 +58,10 @@ function CreateResource() {
       <Heading>Create Resource</Heading>
       <form noValidate onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={4}>
-          <FormControl isInvalid={!!errors.name} isRequired>
-            <FormLabel>Name</FormLabel>
-            <Input type="text" {...register("name")} />
-            <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
+          <FormControl isInvalid={!!errors.title} isRequired>
+            <FormLabel>Title</FormLabel>
+            <Input type="text" {...register("title")} />
+            <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
           </FormControl>
           <FormControl isInvalid={!!errors.url} isRequired>
             <FormLabel>URL</FormLabel>
@@ -102,12 +98,12 @@ function CreateResource() {
                 <AccordionIcon />
               </AccordionButton>
               <AccordionPanel maxH="200px" overflowY="auto">
-                <ResourceSuggestions
-                  query={watch("name")}
+                {/* <ResourceSuggestions
+                  query={watch("title")}
                   onSelect={(resource) => {
                     console.log(resource);
                   }}
-                />
+                /> */}
               </AccordionPanel>
             </AccordionItem>
           </Accordion>

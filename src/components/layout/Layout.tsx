@@ -1,13 +1,15 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Container } from "@chakra-ui/react";
 
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+
+const LAYOUT_WIDTH = "1200px";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
     <Box>
       <Navbar />
-      <Box>{children}</Box>
+      <Container maxW="container.xl">{children}</Container>
       <Footer />
     </Box>
   );

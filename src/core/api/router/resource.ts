@@ -5,16 +5,12 @@ import { z } from "zod";
 import { prisma } from "@/util/server/db/prisma";
 
 import { createRouter } from "../context";
+import { resourceSchema } from "../schema";
 
 const resourceRouter = createRouter()
   .mutation("create", {
-    input: z.object({
-      name: z.string(),
-      description: z.string(),
-      url: z.string().url(),
-      type: z.nativeEnum(ResourceType),
-    }),
-    async resolve({ input: { name, description, url, type }, ctx }) {
+    input: resourceSchema,
+    async resolve({ input: { title, description, url, type }, ctx }) {
       if (!ctx.session) {
         throw new trpc.TRPCError({
           code: "UNAUTHORIZED",
@@ -24,7 +20,7 @@ const resourceRouter = createRouter()
 
       const resource = await prisma.resource.create({
         data: {
-          name,
+          title,
           description,
           url,
           type,
@@ -40,7 +36,7 @@ const resourceRouter = createRouter()
     async resolve({ input: query }) {
       const resources = await prisma.resource.findMany({
         where: {
-          name: {
+          title: {
             contains: query,
             mode: "insensitive",
           },

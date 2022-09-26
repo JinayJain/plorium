@@ -11,7 +11,7 @@ function Resources({ resources }: InferNextProps<typeof getServerSideProps>) {
       <Stack spacing={4}>
         {resources.map((resource) => (
           <Box key={resource.id}>
-            <Link href={`/resource/${resource.id}`}>{resource.name}</Link> by{" "}
+            <Link href={`/resource/${resource.id}`}>{resource.title}</Link> by{" "}
             {resource.author.name}
           </Box>
         ))}

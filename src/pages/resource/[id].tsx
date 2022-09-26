@@ -8,7 +8,7 @@ import InferNextProps from "@/util/types/InferNextProps";
 function ViewResource({ resource }: InferNextProps<typeof getServerSideProps>) {
   return (
     <Layout>
-      <Heading>{resource.name}</Heading>
+      <Heading>{resource.title}</Heading>
       <Text>{resource.description}</Text>
       <Link href={resource.url} target="_blank">
         {resource.url}
@@ -20,23 +20,23 @@ function ViewResource({ resource }: InferNextProps<typeof getServerSideProps>) {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { id } = ctx.query;
 
-  try {
-    const resource = await prisma.resource.findUniqueOrThrow({
-      where: {
-        id: Number(id),
-      },
-    });
+  const resource = await prisma.resource.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
 
-    return {
-      props: {
-        resource,
-      },
-    };
-  } catch (err) {
+  if (!resource) {
     return {
       notFound: true,
     };
   }
+
+  return {
+    props: {
+      resource,
+    },
+  };
 };
 
 export default ViewResource;

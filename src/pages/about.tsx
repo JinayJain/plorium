@@ -5,7 +5,7 @@ import Layout from "@/components/layout/Layout";
 function About() {
   return (
     <Layout>
-      <Heading>About</Heading>
+      <Heading>Plorium</Heading>
     </Layout>
   );
 }

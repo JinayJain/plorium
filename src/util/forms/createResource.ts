@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ResourceType } from "@prisma/client";
-import { useForm } from "react-hook-form";
+import { UseFormProps, useForm } from "react-hook-form";
 import { z } from "zod";
 
 export const ResourceTypeOptions = Object.keys(ResourceType).map((key) => ({
@@ -10,7 +10,7 @@ export const ResourceTypeOptions = Object.keys(ResourceType).map((key) => ({
 }));
 
 export const createResourceSchema = z.object({
-  name: z.string().min(1).max(255),
+  title: z.string().min(1).max(255),
   description: z.string().min(1),
   type: z.nativeEnum(ResourceType),
   url: z.string().url(),
@@ -19,14 +19,17 @@ export const createResourceSchema = z.object({
 export type CreateResourceFormValues = z.infer<typeof createResourceSchema>;
 
 export const defaultCreateResourceFormValues: CreateResourceFormValues = {
-  name: "",
+  title: "",
   description: "",
   type: ResourceTypeOptions[0].value as ResourceType,
   url: "",
 };
 
-export const useCreateResourceForm = () => {
+export const useCreateResourceForm = (
+  props?: UseFormProps<CreateResourceFormValues>,
+) => {
   return useForm<CreateResourceFormValues>({
+    ...props,
     resolver: zodResolver(createResourceSchema),
     defaultValues: defaultCreateResourceFormValues,
   });

@@ -1,5 +1,6 @@
 import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
 import type { NextPage } from "next";
+import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa";
 
 import Layout from "@/components/layout/Layout";
@@ -20,9 +21,11 @@ const Home: NextPage = () => {
             Plorium helps you save hours of searching for resources, so you can
             spend more time learning.
           </Text>
-          <Button rightIcon={<FaArrowRight />} colorScheme="green">
-            Start your journey
-          </Button>
+          <Link href="/explore" passHref>
+            <Button as="a" rightIcon={<FaArrowRight />} colorScheme="green">
+              Start your journey
+            </Button>
+          </Link>
         </Box>
       </Flex>
     </Layout>

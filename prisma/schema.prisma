@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
 }
 
 datasource db {
@@ -30,16 +31,16 @@ model User {
 
   createdAt DateTime @default(now())
 
-  accounts           Account[]
-  sessions           Session[]
   authoredResources  Resource[]
   authoredRoadmaps   Roadmap[]
   subscribedRoadmaps RoadmapLearner[]
+  accounts           Account[]
+  sessions           Session[]
 }
 
 model Resource {
   id          Int          @id @default(autoincrement())
-  name        String
+  title       String
   description String
   url         String
   type        ResourceType
@@ -48,8 +49,8 @@ model Resource {
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 
-  author User           @relation(fields: [authorId], references: [id])
-  blocks RoadmapBlock[]
+  author User            @relation(fields: [authorId], references: [id])
+  blocks ResourceBlock[]
 }
 
 enum ResourceType {
@@ -62,7 +63,7 @@ enum ResourceType {
 
 model Roadmap {
   id          Int    @id @default(autoincrement())
-  name        String
+  title       String
   description String
   authorId    String
 
@@ -71,23 +72,36 @@ model Roadmap {
 
   author   User             @relation(fields: [authorId], references: [id])
   learners RoadmapLearner[]
+  blocks   Block[]
 }
 
-model RoadmapBlock {
-  id         Int              @id @default(autoincrement())
-  roadmapId  Int
-  type       RoadmapBlockType
-  resourceId Int?
-  note       String?
+model Block {
+  id        Int @id @default(autoincrement())
+  roadmapId Int
+  order     Int
 
+  updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 
-  resource Resource? @relation(fields: [resourceId], references: [id])
+  roadmap       Roadmap        @relation(fields: [roadmapId], references: [id])
+  resourceBlock ResourceBlock?
+  noteBlock     NoteBlock?
 }
 
-enum RoadmapBlockType {
-  RESOURCE
-  NOTE
+model ResourceBlock {
+  id         Int @id
+  resourceId Int
+
+  block    Block    @relation(fields: [id], references: [id])
+  resource Resource @relation(fields: [resourceId], references: [id])
+}
+
+model NoteBlock {
+  id      Int     @id
+  title   String?
+  content String
+
+  block Block @relation(fields: [id], references: [id])
 }
 
 model RoadmapLearner {

@@ -1,123 +1,104 @@
-import { SmallAddIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
   Heading,
   Input,
-  Stack,
+  Text,
   Textarea,
+  useToast,
 } from "@chakra-ui/react";
-import { Resource } from "@prisma/client";
 import dynamic from "next/dynamic";
-import { Dispatch, SetStateAction, useState } from "react";
-import {
-  DragDropContext,
-  DropResult,
-  resetServerContext,
-} from "react-beautiful-dnd";
+import { DragDropContext, resetServerContext } from "react-beautiful-dnd";
 
 import Layout from "@/components/layout/Layout";
-import { useCreateResourceForm } from "@/util/forms/create-resource";
+import {
+  CreateRoadmapFormValues,
+  useCreateRoadmapForm,
+} from "@/util/forms/createRoadmap";
+import { useAppDispatch, useAppSelector } from "@/util/redux/hooks";
+import { moveBlock } from "@/util/redux/slice/roadmapEditorSlice";
+import type { ResourceBlock } from "@/util/redux/slice/roadmapEditorSlice";
+import { trpc } from "@/util/trpc";
 
-const RoadmapEditor = dynamic(
-  () => import("@/components/roadmap/RoadmapEditor"),
+const BlocksEditor = dynamic(
+  () => import("@/components/roadmapEditor/BlocksEditor"),
   {
     ssr: false,
   },
 );
 
-export type ResourceBlockData = Pick<
-  Resource,
-  "name" | "description" | "url" | "type"
-> & {
-  id: string;
-  existing: boolean;
-};
-
-function Blocks({
-  blocks,
-  setBlocks,
-}: {
-  blocks: ResourceBlockData[];
-  setBlocks: Dispatch<SetStateAction<ResourceBlockData[]>>;
-}) {
-  const onDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
-
-    const items = Array.from(blocks);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-
-    setBlocks(items);
-  };
-
-  const onCreate = (block: ResourceBlockData, index: number) => {
-    const newBlocks = [...blocks];
-    newBlocks.splice(index, 0, block);
-    setBlocks(newBlocks);
-  };
-
-  const onEdit = (block: ResourceBlockData, index: number) => {
-    const newBlocks = [...blocks];
-    newBlocks[index] = block;
-    setBlocks(newBlocks);
-  };
-
-  const onDelete = (index: number) => {
-    const newBlocks = [...blocks];
-    newBlocks.splice(index, 1);
-    setBlocks(newBlocks);
-  };
-
-  return (
-    <Box>
-      <Heading size="lg">Steps</Heading>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <RoadmapEditor
-          blocks={blocks}
-          onCreate={onCreate}
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
-      </DragDropContext>
-    </Box>
-  );
-}
-
 function CreateRoadmap() {
-  const [blocks, setBlocks] = useState<ResourceBlockData[]>([]);
-
   const {
-    handleSubmit,
     register,
+    handleSubmit,
     formState: { errors },
-  } = useCreateResourceForm();
+  } = useCreateRoadmapForm();
+  const createRoadmapMutation = trpc.useMutation("roadmap.create");
+  const toast = useToast();
+
+  const dispatch = useAppDispatch();
+  const blocks = useAppSelector((state) => state.roadmapEditor.blocks);
+
+  const getFieldControlProps = (name: keyof CreateRoadmapFormValues) => ({
+    isInvalid: !!errors[name],
+    isRequired: true,
+  });
+
+  const onSubmit = async (values: CreateRoadmapFormValues) => {
+    const resourceBlocks = blocks.filter(
+      (block): block is ResourceBlock => block.kind === "resource",
+    );
+
+    await createRoadmapMutation.mutateAsync({
+      ...values,
+      blocks: resourceBlocks,
+    });
+
+    toast({
+      title: "Roadmap created.",
+      status: "success",
+      isClosable: true,
+    });
+  };
 
   return (
     <Layout>
       <Heading>Create Roadmap</Heading>
 
-      <form noValidate>
-        <Stack>
-          <FormControl isRequired isInvalid={!!errors.name}>
-            <FormLabel>Name</FormLabel>
-            <Input type="text" {...register("name")} />
-            <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
-          </FormControl>
-          <FormControl isRequired isInvalid={!!errors.description}>
-            <FormLabel>Description</FormLabel>
-            <Textarea {...register("description")} />
-            <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
-          </FormControl>
-        </Stack>
-      </form>
+      <FormControl {...getFieldControlProps("title")}>
+        <FormLabel>Title</FormLabel>
+        <Input {...register("title")} />
+        <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
+      </FormControl>
 
-      <Blocks blocks={blocks} setBlocks={setBlocks} />
+      <FormControl {...getFieldControlProps("description")}>
+        <FormLabel>Description</FormLabel>
+        <Textarea {...register("description")} />
+        <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
+      </FormControl>
 
-      <Button leftIcon={<SmallAddIcon />}>Create</Button>
+      <Heading size="md">Blocks</Heading>
+
+      <DragDropContext
+        onDragEnd={(result) => {
+          if (!result.destination) {
+            return;
+          }
+
+          dispatch(
+            moveBlock({
+              from: result.source.index,
+              to: result.destination?.index,
+            }),
+          );
+        }}
+      >
+        <BlocksEditor />
+      </DragDropContext>
+
+      <Button onClick={handleSubmit(onSubmit)}>Create</Button>
     </Layout>
   );
 }
