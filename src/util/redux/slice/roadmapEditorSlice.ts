@@ -7,6 +7,7 @@ type BaseBlock = {
 
 export type ResourceBlock = BaseBlock & {
   kind: "resource";
+  id?: string;
   title: string;
   description: string;
   url: string;

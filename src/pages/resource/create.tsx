@@ -35,7 +35,6 @@ function CreateResource() {
 
   const {
     register,
-    watch,
     handleSubmit,
     reset,
     formState: { errors },

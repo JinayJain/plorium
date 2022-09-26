@@ -1,4 +1,3 @@
-import { ResourceType } from "@prisma/client";
 import * as trpc from "@trpc/server";
 import { z } from "zod";
 
@@ -32,8 +31,11 @@ const resourceRouter = createRouter()
     },
   })
   .query("suggestions", {
-    input: z.string(),
-    async resolve({ input: query }) {
+    input: z.object({
+      query: z.string(),
+      limit: z.number().optional(),
+    }),
+    async resolve({ input: { query, limit = 5 } }) {
       const resources = await prisma.resource.findMany({
         where: {
           title: {
@@ -41,7 +43,7 @@ const resourceRouter = createRouter()
             mode: "insensitive",
           },
         },
-        take: 5,
+        take: limit,
       });
 
       return resources;

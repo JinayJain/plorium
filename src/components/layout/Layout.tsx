@@ -1,15 +1,32 @@
-import { Box, Container } from "@chakra-ui/react";
+import { Box, Container, ContainerProps } from "@chakra-ui/react";
 
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 
-const LAYOUT_WIDTH = "1200px";
-
-function Layout({ children }: { children: React.ReactNode }) {
+function Layout({
+  children,
+  variant = "default",
+  ...props
+}: {
+  children: React.ReactNode;
+  variant?: "default" | "bare";
+} & ContainerProps) {
   return (
     <Box>
       <Navbar />
-      <Container maxW="container.xl">{children}</Container>
+      <main>
+        {variant === "default" ? (
+          <Container
+            maxW={props.maxW || "container.xl"}
+            py={props.py ?? 8}
+            {...props}
+          >
+            {children}
+          </Container>
+        ) : (
+          children
+        )}
+      </main>
       <Footer />
     </Box>
   );
