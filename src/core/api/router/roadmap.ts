@@ -31,9 +31,14 @@ const roadmapRouter = createRouter().mutation("create", {
           tx.resourceBlock.create({
             data: {
               resource: {
-                create: {
-                  ...block,
-                  authorId,
+                connectOrCreate: {
+                  where: {
+                    id: block.id,
+                  },
+                  create: {
+                    ...block,
+                    authorId,
+                  },
                 },
               },
               block: {

@@ -1,10 +1,21 @@
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
   Button,
+  Flex,
   FormControl,
   FormControlOptions,
   FormErrorMessage,
   FormLabel,
+  Heading,
   Input,
+  Link,
+  LinkBox,
+  LinkOverlay,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -13,8 +24,12 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
+  Stack,
+  Text,
   Textarea,
 } from "@chakra-ui/react";
+import { Resource } from "@prisma/client";
+import NextLink from "next/link";
 
 import {
   CreateResourceFormValues,
@@ -23,6 +38,65 @@ import {
 } from "@/util/forms/createResource";
 import { useAppDispatch } from "@/util/redux/hooks";
 import { addBlock } from "@/util/redux/slice/roadmapEditorSlice";
+import { trpc } from "@/util/trpc";
+
+function Suggestions({
+  query,
+  onSelect,
+}: {
+  query: string;
+  onSelect: (resource: Resource) => void;
+}) {
+  const { data } = trpc.useQuery([
+    "resource.suggestions",
+    {
+      query,
+    },
+  ]);
+
+  return (
+    <Accordion allowToggle defaultIndex={0}>
+      <AccordionItem>
+        <h2>
+          <AccordionButton>
+            <Box flex="1" textAlign="left">
+              Suggestions
+            </Box>
+
+            <AccordionIcon />
+          </AccordionButton>
+        </h2>
+
+        <AccordionPanel>
+          <Stack spacing={4}>
+            {data &&
+              data.map((resource) => (
+                <Flex key={resource.id}>
+                  <Box flex="1">
+                    <NextLink href={`/resource/${resource.id}`} passHref>
+                      <Link target="_blank">
+                        <Heading size="sm">{resource.title}</Heading>
+                      </Link>
+                    </NextLink>
+                    <Text>{resource.url}</Text>
+                  </Box>
+
+                  <Button
+                    colorScheme="blue"
+                    variant="outline"
+                    onClick={() => onSelect(resource)}
+                    size="sm"
+                  >
+                    Select
+                  </Button>
+                </Flex>
+              ))}
+          </Stack>
+        </AccordionPanel>
+      </AccordionItem>
+    </Accordion>
+  );
+}
 
 function BlockModal({
   isOpen,
@@ -33,6 +107,7 @@ function BlockModal({
 }) {
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useCreateResourceForm();
@@ -46,12 +121,24 @@ function BlockModal({
     isRequired: true,
   });
 
-  const onSubmit = (values: CreateResourceFormValues) => {
+  const onCreate = (values: CreateResourceFormValues) => {
     dispatch(
       addBlock({
         editorId: Math.random().toString(36).substring(7),
         kind: "resource",
         ...values,
+      }),
+    );
+
+    onClose();
+  };
+
+  const onSelect = (resource: Resource) => {
+    dispatch(
+      addBlock({
+        editorId: Math.random().toString(36).substring(7),
+        kind: "resource",
+        ...resource,
       }),
     );
 
@@ -65,7 +152,7 @@ function BlockModal({
         <ModalHeader>Create Block</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <form noValidate>
+          <Stack spacing={4}>
             <FormControl {...getFieldControlProps("title")}>
               <FormLabel>Title</FormLabel>
               <Input {...register("title")} />
@@ -95,14 +182,16 @@ function BlockModal({
               </Select>
               <FormErrorMessage>{errors.type?.message}</FormErrorMessage>
             </FormControl>
-          </form>
+
+            <Suggestions query={watch("title")} onSelect={onSelect} />
+          </Stack>
         </ModalBody>
 
         <ModalFooter>
           <Button onClick={onClose} mr={3}>
             Cancel
           </Button>
-          <Button colorScheme="blue" onClick={handleSubmit(onSubmit)}>
+          <Button colorScheme="blue" onClick={handleSubmit(onCreate)}>
             Save
           </Button>
         </ModalFooter>

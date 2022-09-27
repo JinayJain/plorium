@@ -1,9 +1,51 @@
-import { Button, Heading, Text, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Icon,
+  Stack,
+  Tag,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { Resource } from "@prisma/client";
 import { Draggable, Droppable } from "react-beautiful-dnd";
+import {
+  FaGripLines,
+  FaGripLinesVertical,
+  FaGripVertical,
+} from "react-icons/fa";
 
 import { useAppSelector } from "@/util/redux/hooks";
 
+import TypeTag from "../resource/TypeTag";
 import BlockModal from "./BlockModal";
+
+function ResourceBlockPreview({
+  isNew,
+  title,
+  type,
+  description,
+  url,
+}: Pick<Resource, "title" | "type" | "description" | "url"> & {
+  isNew: boolean;
+}) {
+  return (
+    <>
+      <Heading size="sm">
+        {title} <TypeTag type={type} size="sm" />{" "}
+        {isNew && (
+          <Tag colorScheme="green" size="sm">
+            NEW
+          </Tag>
+        )}
+      </Heading>
+      <Text>{description}</Text>
+      <Text>{url}</Text>
+    </>
+  );
+}
 
 function BlocksEditor() {
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -12,7 +54,7 @@ function BlocksEditor() {
   return (
     <Droppable droppableId="blocks">
       {(provided) => (
-        <div ref={provided.innerRef} {...provided.droppableProps}>
+        <Box ref={provided.innerRef} {...provided.droppableProps}>
           {blocks.map((block, index) => (
             <Draggable
               key={block.editorId}
@@ -20,20 +62,28 @@ function BlocksEditor() {
               index={index}
             >
               {(provided) => (
-                <div
+                <Flex
                   ref={provided.innerRef}
                   {...provided.draggableProps}
-                  {...provided.dragHandleProps}
+                  mb={4}
                 >
-                  {block.kind === "resource" ? (
-                    <>
-                      <Heading size="sm">{block.title}</Heading>
-                      <Text>{block.description}</Text>
-                    </>
-                  ) : (
-                    <Text>Unknown block kind</Text>
-                  )}
-                </div>
+                  <Flex align="center" justify="center" mx={2}>
+                    <Box
+                      {...provided.dragHandleProps}
+                      p={1}
+                      _hover={{ bg: "gray.100" }}
+                    >
+                      <Icon as={FaGripVertical} />
+                    </Box>
+                  </Flex>
+                  <Box p={4} flex="1" borderWidth={1} bg="white">
+                    {block.kind === "resource" ? (
+                      <ResourceBlockPreview {...block} isNew={!block.id} />
+                    ) : (
+                      <Text>Unknown block kind</Text>
+                    )}
+                  </Box>{" "}
+                </Flex>
               )}
             </Draggable>
           ))}
@@ -42,7 +92,7 @@ function BlocksEditor() {
           <Button onClick={onOpen}>Add</Button>
 
           <BlockModal isOpen={isOpen} onClose={onClose} />
-        </div>
+        </Box>
       )}
     </Droppable>
   );

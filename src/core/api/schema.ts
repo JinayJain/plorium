@@ -2,6 +2,7 @@ import { ResourceType } from "@prisma/client";
 import { z } from "zod";
 
 export const resourceSchema = z.object({
+  id: z.number().optional(),
   title: z.string(),
   description: z.string(),
   url: z.string().url(),
