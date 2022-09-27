@@ -13,6 +13,7 @@ import { GetServerSidePropsContext } from "next";
 import NextLink from "next/link";
 
 import Layout from "@/components/layout/Layout";
+import TypeTag from "@/components/resource/TypeTag";
 import { prisma } from "@/util/server/db/prisma";
 import InferNextProps from "@/util/types/InferNextProps";
 
@@ -23,9 +24,7 @@ function ViewResource({
   return (
     <Layout>
       <Box borderWidth="1px" borderRadius="lg" p={[8, 8, 16]}>
-        <Tag size="lg" colorScheme="yellow">
-          {resource.type}
-        </Tag>
+        <TypeTag type={resource.type} mb={2} />
         <Heading size="2xl" my={2}>
           {resource.title}
         </Heading>

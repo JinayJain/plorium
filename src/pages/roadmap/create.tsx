@@ -64,22 +64,21 @@ function CreateRoadmap() {
 
   return (
     <Layout>
-      <Heading>Create Roadmap</Heading>
+      <Heading mb={4}>Create Roadmap</Heading>
 
-      <FormControl {...getFieldControlProps("title")}>
+      <FormControl {...getFieldControlProps("title")} mb={4}>
         <FormLabel>Title</FormLabel>
         <Input {...register("title")} />
         <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
       </FormControl>
 
-      <FormControl {...getFieldControlProps("description")}>
+      <FormControl {...getFieldControlProps("description")} mb={8}>
         <FormLabel>Description</FormLabel>
         <Textarea {...register("description")} />
         <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
       </FormControl>
 
       <Heading size="md">Blocks</Heading>
-
       <DragDropContext
         onDragEnd={(result) => {
           if (!result.destination) {

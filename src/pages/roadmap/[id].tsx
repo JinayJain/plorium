@@ -13,18 +13,17 @@ import { GetServerSidePropsContext } from "next";
 import NextLink from "next/link";
 
 import Layout from "@/components/layout/Layout";
+import TypeTag from "@/components/resource/TypeTag";
 import { prisma } from "@/util/server/db/prisma";
 import InferNextProps from "@/util/types/InferNextProps";
 
 function ResourceBlock({ resource }: { resource: Resource }) {
   return (
     <>
-      <Tag size="sm" colorScheme="yellow">
-        {resource.type}
-      </Tag>
+      <TypeTag size="sm" type={resource.type} mb={2} />
       <NextLink href={`/resource/${resource.id}`} passHref>
         <Link>
-          <Heading size="md" my={2}>
+          <Heading size="md" mb={2}>
             {resource.title}
           </Heading>
         </Link>
@@ -43,7 +42,9 @@ function NoteBlock({
 }) {
   return (
     <>
-      <Heading size="md">{title}</Heading>
+      <Heading size="md" mb={2}>
+        {title}
+      </Heading>
       <Text>{content}</Text>
     </>
   );
