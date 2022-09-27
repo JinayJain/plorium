@@ -33,7 +33,7 @@ const roadmapRouter = createRouter().mutation("create", {
               resource: {
                 connectOrCreate: {
                   where: {
-                    id: block.id,
+                    id: block.id ?? -1,
                   },
                   create: {
                     ...block,
