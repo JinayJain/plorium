@@ -88,6 +88,11 @@ model Block {
   noteBlock     NoteBlock?
 }
 
+enum BlockType {
+  RESOURCE
+  NOTE
+}
+
 model ResourceBlock {
   id         Int @id
   resourceId Int

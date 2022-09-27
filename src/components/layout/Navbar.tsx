@@ -116,42 +116,44 @@ function Navbar() {
   const { status, data: session } = useSession();
 
   return (
-    <Container maxW="container.xl" py={2} borderBottomWidth={1}>
-      <Flex align="center">
-        <NextLink href="/" passHref>
-          <Link as={Heading} size="lg">
-            Plorium
-          </Link>
-        </NextLink>
+    <Box as="nav" w="full" borderBottomWidth={1}>
+      <Container maxW="container.xl" py={2}>
+        <Flex align="center">
+          <NextLink href="/" passHref>
+            <Link as={Heading} size="lg">
+              Plorium
+            </Link>
+          </NextLink>
 
-        <HStack spacing={4} align="center" ml={8}>
-          {NAV_LINKS.map((link) => (
-            <NextLink href={link.href} key={link.name} passHref>
-              <Link>{link.name}</Link>
-            </NextLink>
-          ))}
-        </HStack>
+          <HStack spacing={4} align="center" ml={8}>
+            {NAV_LINKS.map((link) => (
+              <NextLink href={link.href} key={link.name} passHref>
+                <Link>{link.name}</Link>
+              </NextLink>
+            ))}
+          </HStack>
 
-        <HStack ml="auto" spacing={4} align="center">
-          {status === "loading" ? (
-            <Spinner size="sm" />
-          ) : status === "unauthenticated" || !session?.user ? (
-            <Button
-              leftIcon={<FcGoogle />}
-              onClick={() => signIn("google")}
-              variant="outline"
-            >
-              Sign in with Google
-            </Button>
-          ) : (
-            <HStack spacing={4}>
-              <CreateMenu />
-              <ProfileMenu user={session.user} />
-            </HStack>
-          )}
-        </HStack>
-      </Flex>
-    </Container>
+          <HStack ml="auto" spacing={4} align="center">
+            {status === "loading" ? (
+              <Spinner size="sm" />
+            ) : status === "unauthenticated" || !session?.user ? (
+              <Button
+                leftIcon={<FcGoogle />}
+                onClick={() => signIn("google")}
+                variant="outline"
+              >
+                Sign in with Google
+              </Button>
+            ) : (
+              <HStack spacing={4}>
+                <CreateMenu />
+                <ProfileMenu user={session.user} />
+              </HStack>
+            )}
+          </HStack>
+        </Flex>
+      </Container>
+    </Box>
   );
 }
 

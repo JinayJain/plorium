@@ -1,9 +1,53 @@
-import { Heading, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Container,
+  Heading,
+  Link,
+  Stack,
+  Tag,
+  Text,
+} from "@chakra-ui/react";
+import { Resource } from "@prisma/client";
 import { GetServerSidePropsContext } from "next";
+import NextLink from "next/link";
 
 import Layout from "@/components/layout/Layout";
 import { prisma } from "@/util/server/db/prisma";
 import InferNextProps from "@/util/types/InferNextProps";
+
+function ResourceBlock({ resource }: { resource: Resource }) {
+  return (
+    <>
+      <Tag size="sm" colorScheme="yellow">
+        {resource.type}
+      </Tag>
+      <NextLink href={`/resource/${resource.id}`} passHref>
+        <Link>
+          <Heading size="md" my={2}>
+            {resource.title}
+          </Heading>
+        </Link>
+      </NextLink>
+      <Text>{resource.description}</Text>
+    </>
+  );
+}
+
+function NoteBlock({
+  content,
+  title,
+}: {
+  content: string;
+  title: string | null;
+}) {
+  return (
+    <>
+      <Heading size="md">{title}</Heading>
+      <Text>{content}</Text>
+    </>
+  );
+}
 
 function Roadmap({
   title,
@@ -13,26 +57,32 @@ function Roadmap({
 }: InferNextProps<typeof getServerSideProps>) {
   return (
     <Layout variant="bare">
-      <Heading>{title}</Heading>
-      <Heading size="md">by {author.name}</Heading>
-      <Text>{description}</Text>
-      {blocks.map((block) => {
-        if (block.resourceBlock) {
-          return (
-            <Text key={block.resourceBlock.id}>
-              {block.resourceBlock.resource.title}
-            </Text>
-          );
-        }
+      <Box textAlign="center" mt={16}>
+        <Heading mb={4} size="2xl">
+          {title}
+        </Heading>
+        <Text fontSize="lg" mb={4}>
+          <Avatar size="xs" ml={2} src={author.image ?? ""} /> {author.name}
+        </Text>
+        <Text>{description}</Text>
+      </Box>
 
-        if (block.noteBlock) {
-          return (
-            <Text key={block.noteBlock.id}>{block.noteBlock.content}</Text>
-          );
-        }
-
-        return null;
-      })}
+      <Container maxW="container.xl" mt={16}>
+        <Stack spacing={0}>
+          {blocks.map((block, index) => (
+            <Box key={block.id}>
+              {index !== 0 && <Box m="auto" h={8} bg="gray.200" w={2} />}
+              <Box borderWidth="1px" borderRadius="lg" p={4}>
+                {block.resourceBlock ? (
+                  <ResourceBlock resource={block.resourceBlock.resource} />
+                ) : block.noteBlock ? (
+                  <NoteBlock {...block.noteBlock} />
+                ) : null}
+              </Box>
+            </Box>
+          ))}
+        </Stack>
+      </Container>
     </Layout>
   );
 }

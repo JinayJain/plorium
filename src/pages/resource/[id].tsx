@@ -1,4 +1,4 @@
-import { ArrowForwardIcon } from "@chakra-ui/icons";
+import { ArrowForwardIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
@@ -22,8 +22,8 @@ function ViewResource({
 }: InferNextProps<typeof getServerSideProps>) {
   return (
     <Layout>
-      <Box mt={8}>
-        <Tag size="md" colorScheme="yellow">
+      <Box borderWidth="1px" borderRadius="lg" p={[8, 8, 16]}>
+        <Tag size="lg" colorScheme="yellow">
           {resource.type}
         </Tag>
         <Heading size="2xl" my={2}>
@@ -37,10 +37,10 @@ function ViewResource({
           w="fit-content"
           isExternal
         >
-          {resource.url} <ArrowForwardIcon />
+          {resource.url} <ExternalLinkIcon mx="2px" />
         </Link>
 
-        <Text fontSize="lg" my={4}>
+        <Text fontSize="lg" my={8}>
           {resource.description}
         </Text>
 
@@ -51,25 +51,26 @@ function ViewResource({
             {resource.author.name}
           </Text>
         </Text>
-        <Box mt={12}>
-          <Heading size="md">Roadmaps with this resource</Heading>
+      </Box>
 
-          <SimpleGrid minChildWidth="300px" spacing={4} mt={4}>
-            {roadmaps.map((roadmap) => (
-              <Box key={roadmap.id} p={4} borderWidth="1px" borderRadius="md">
-                <NextLink href={`/roadmap/${roadmap.id}`} passHref>
-                  <Link>
-                    <Heading size="sm">{roadmap.title}</Heading>
-                  </Link>
-                </NextLink>
+      <Box mt={12}>
+        <Heading size="md">Roadmaps with this resource</Heading>
 
-                <Text color="gray" mt={2}>
-                  {roadmap.description}
-                </Text>
-              </Box>
-            ))}
-          </SimpleGrid>
-        </Box>
+        <SimpleGrid minChildWidth="300px" spacing={4} mt={4}>
+          {roadmaps.map((roadmap) => (
+            <Box key={roadmap.id} p={4} borderWidth="1px" borderRadius="md">
+              <NextLink href={`/roadmap/${roadmap.id}`} passHref>
+                <Link>
+                  <Heading size="sm">{roadmap.title}</Heading>
+                </Link>
+              </NextLink>
+
+              <Text color="gray" mt={2}>
+                {roadmap.description}
+              </Text>
+            </Box>
+          ))}
+        </SimpleGrid>
       </Box>
     </Layout>
   );

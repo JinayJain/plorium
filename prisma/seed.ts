@@ -10,6 +10,7 @@ const NUM_ROADMAPS = 100;
 async function main() {
   const userIds = [];
 
+  console.log("Creating users...");
   for (let i = 0; i < NUM_USERS; i++) {
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
@@ -28,6 +29,7 @@ async function main() {
 
   const resourceIds = [];
 
+  console.log("Creating resources...");
   for (let i = 0; i < NUM_RESOURCES; i++) {
     const resource = await prisma.resource.create({
       data: {
@@ -42,6 +44,7 @@ async function main() {
     resourceIds.push(resource.id);
   }
 
+  console.log("Creating roadmaps...");
   for (let i = 0; i < NUM_ROADMAPS; i++) {
     const roadmap = await prisma.roadmap.create({
       data: {
@@ -78,6 +81,20 @@ async function main() {
 
           break;
         case "note":
+          await prisma.noteBlock.create({
+            data: {
+              block: {
+                create: {
+                  order: j,
+                  roadmapId: roadmap.id,
+                },
+              },
+              title: faker.datatype.boolean() ? faker.company.bs() : null,
+              content: faker.random.words(
+                faker.datatype.number({ min: 10, max: 20 }),
+              ),
+            },
+          });
           break;
       }
     }
