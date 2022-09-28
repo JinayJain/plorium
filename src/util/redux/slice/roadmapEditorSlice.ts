@@ -7,17 +7,21 @@ type BaseBlock = {
 
 export type ResourceBlock = BaseBlock & {
   kind: "resource";
-  id?: number;
-  title: string;
-  description: string;
-  url: string;
-  type: ResourceType;
+  resource: {
+    id?: number;
+    title: string;
+    description: string;
+    url: string;
+    type: ResourceType;
+  };
 };
 
 export type NoteBlock = BaseBlock & {
   kind: "note";
-  title?: string;
-  content: string;
+  note: {
+    title?: string;
+    content: string;
+  };
 };
 
 type RoadmapBlock = ResourceBlock | NoteBlock;

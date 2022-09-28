@@ -4,18 +4,13 @@ import {
   Flex,
   Heading,
   Icon,
-  Stack,
   Tag,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { Resource } from "@prisma/client";
 import { Draggable, Droppable } from "react-beautiful-dnd";
-import {
-  FaGripLines,
-  FaGripLinesVertical,
-  FaGripVertical,
-} from "react-icons/fa";
+import { FaGripVertical } from "react-icons/fa";
 
 import { useAppSelector } from "@/util/redux/hooks";
 
@@ -43,6 +38,21 @@ function ResourceBlockPreview({
       </Heading>
       <Text>{description}</Text>
       <Text>{url}</Text>
+    </>
+  );
+}
+
+function NoteBlockPreview({
+  title,
+  content,
+}: {
+  title?: string;
+  content: string;
+}) {
+  return (
+    <>
+      {title && <Heading size="sm">{title}</Heading>}
+      <Text>{content}</Text>
     </>
   );
 }
@@ -78,10 +88,16 @@ function BlocksEditor() {
                   </Flex>
                   <Box p={4} flex="1" borderWidth={1} bg="white">
                     {block.kind === "resource" ? (
-                      <ResourceBlockPreview {...block} isNew={!block.id} />
-                    ) : (
-                      <Text>Unknown block kind</Text>
-                    )}
+                      <ResourceBlockPreview
+                        {...block.resource}
+                        isNew={!block.resource.id}
+                      />
+                    ) : block.kind === "note" ? (
+                      <NoteBlockPreview
+                        title={block.note.title}
+                        content={block.note.content}
+                      />
+                    ) : null}
                   </Box>{" "}
                 </Flex>
               )}

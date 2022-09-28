@@ -113,7 +113,7 @@ function ResourceBlockCreator({
       addBlock({
         editorId: Math.random().toString(36).substring(7),
         kind: "resource",
-        ...resource,
+        resource,
       }),
     );
 

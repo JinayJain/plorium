@@ -1,14 +1,5 @@
-import { ArrowForwardIcon, ExternalLinkIcon } from "@chakra-ui/icons";
-import {
-  Avatar,
-  Box,
-  Heading,
-  Link,
-  SimpleGrid,
-  Stack,
-  Tag,
-  Text,
-} from "@chakra-ui/react";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { Avatar, Box, Heading, Link, SimpleGrid, Text } from "@chakra-ui/react";
 import { GetServerSidePropsContext } from "next";
 import NextLink from "next/link";
 

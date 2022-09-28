@@ -18,7 +18,6 @@ import {
 } from "@/util/forms/createRoadmap";
 import { useAppDispatch, useAppSelector } from "@/util/redux/hooks";
 import { moveBlock } from "@/util/redux/slice/roadmapEditorSlice";
-import type { ResourceBlock } from "@/util/redux/slice/roadmapEditorSlice";
 import { trpc } from "@/util/trpc";
 
 const BlocksEditor = dynamic(

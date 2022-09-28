@@ -2,15 +2,16 @@ import {
   Avatar,
   Box,
   Container,
+  Grid,
+  GridItem,
   Heading,
   Link,
-  Stack,
-  Tag,
   Text,
 } from "@chakra-ui/react";
 import { Resource } from "@prisma/client";
 import { GetServerSidePropsContext } from "next";
 import NextLink from "next/link";
+import { Fragment } from "react";
 
 import Layout from "@/components/layout/Layout";
 import TypeTag from "@/components/resource/TypeTag";
@@ -42,9 +43,11 @@ function NoteBlock({
 }) {
   return (
     <>
-      <Heading size="md" mb={2}>
-        {title}
-      </Heading>
+      {title && (
+        <Heading size="md" mb={2}>
+          {title}
+        </Heading>
+      )}
       <Text>{content}</Text>
     </>
   );
@@ -56,6 +59,8 @@ function Roadmap({
   description,
   blocks,
 }: InferNextProps<typeof getServerSideProps>) {
+  const spacing = 4;
+
   return (
     <Layout variant="bare">
       <Box textAlign="center" mt={16}>
@@ -69,20 +74,52 @@ function Roadmap({
       </Box>
 
       <Container maxW="container.xl" mt={16}>
-        <Stack spacing={0}>
+        {/* Create the left timeline column */}
+        <Grid templateColumns="40px 1fr" rowGap={spacing} columnGap={4}>
           {blocks.map((block, index) => (
-            <Box key={block.id}>
-              {index !== 0 && <Box m="auto" h={8} bg="gray.200" w={2} />}
-              <Box borderWidth="1px" borderRadius="lg" p={4}>
-                {block.resourceBlock ? (
+            <Fragment key={index}>
+              <GridItem colSpan={1} position="relative" userSelect="none">
+                <Box
+                  position="absolute"
+                  top={index === 0 ? "50%" : -spacing / 2}
+                  bottom={index === blocks.length - 1 ? "50%" : -spacing / 2}
+                  left="50%"
+                  transform="translateX(-50%)"
+                  width="2px"
+                  bg="gray.200"
+                />
+
+                <Box
+                  position="absolute"
+                  top="50%"
+                  left="50%"
+                  transform="translate(-50%, -50%)"
+                  bg="white"
+                  borderRadius="full"
+                  borderWidth={1}
+                  w={10}
+                  h={10}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  {index + 1}
+                </Box>
+              </GridItem>
+              <GridItem colSpan={1} borderWidth={1} p={4} borderRadius="md">
+                {block.resourceBlock && (
                   <ResourceBlock resource={block.resourceBlock.resource} />
-                ) : block.noteBlock ? (
-                  <NoteBlock {...block.noteBlock} />
-                ) : null}
-              </Box>
-            </Box>
+                )}
+                {block.noteBlock && (
+                  <NoteBlock
+                    content={block.noteBlock.content}
+                    title={block.noteBlock.title}
+                  />
+                )}
+              </GridItem>
+            </Fragment>
           ))}
-        </Stack>
+        </Grid>
       </Container>
     </Layout>
   );

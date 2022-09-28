@@ -57,7 +57,7 @@ function BlockModal({
       addBlock({
         editorId: Math.random().toString(36).substring(7),
         kind: "resource",
-        ...values,
+        resource: values,
       }),
     );
 
@@ -69,7 +69,7 @@ function BlockModal({
       addBlock({
         editorId: Math.random().toString(36).substring(7),
         kind: "note",
-        ...values,
+        note: values,
       }),
     );
 
