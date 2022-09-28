@@ -46,13 +46,9 @@ function CreateRoadmap() {
   });
 
   const onSubmit = async (values: CreateRoadmapFormValues) => {
-    const resourceBlocks = blocks.filter(
-      (block): block is ResourceBlock => block.kind === "resource",
-    );
-
     await createRoadmapMutation.mutateAsync({
       ...values,
-      blocks: resourceBlocks,
+      blocks,
     });
 
     toast({

@@ -16,7 +16,7 @@ export type ResourceBlock = BaseBlock & {
 
 export type NoteBlock = BaseBlock & {
   kind: "note";
-  title: string;
+  title?: string;
   content: string;
 };
 

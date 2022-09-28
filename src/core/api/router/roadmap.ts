@@ -28,27 +28,39 @@ const roadmapRouter = createRouter().mutation("create", {
 
       await Promise.all(
         blocks.map(async (block, index) =>
-          tx.resourceBlock.create({
-            data: {
-              resource: {
-                connectOrCreate: {
-                  where: {
-                    id: block.id ?? -1,
+          block.kind === "note"
+            ? tx.noteBlock.create({
+                data: {
+                  block: {
+                    create: {
+                      roadmapId: roadmap.id,
+                      order: index,
+                    },
                   },
-                  create: {
-                    ...block,
-                    authorId,
+                  ...block.note,
+                },
+              })
+            : tx.resourceBlock.create({
+                data: {
+                  resource: {
+                    connectOrCreate: {
+                      where: {
+                        id: block.resource.id ?? -1,
+                      },
+                      create: {
+                        ...block.resource,
+                        authorId,
+                      },
+                    },
+                  },
+                  block: {
+                    create: {
+                      roadmapId: roadmap.id,
+                      order: index,
+                    },
                   },
                 },
-              },
-              block: {
-                create: {
-                  roadmapId: roadmap.id,
-                  order: index,
-                },
-              },
-            },
-          }),
+              }),
         ),
       );
 

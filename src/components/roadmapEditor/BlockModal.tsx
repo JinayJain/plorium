@@ -1,21 +1,5 @@
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
   Button,
-  Flex,
-  FormControl,
-  FormControlOptions,
-  FormErrorMessage,
-  FormLabel,
-  Heading,
-  Input,
-  Link,
-  LinkBox,
-  LinkOverlay,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -23,80 +7,27 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select,
-  Stack,
-  Text,
-  Textarea,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
 } from "@chakra-ui/react";
-import { Resource } from "@prisma/client";
-import NextLink from "next/link";
+import { useEffect, useState } from "react";
 
 import {
+  CreateNoteFormValues,
+  useCreateNoteForm,
+} from "@/util/forms/createNote";
+import {
   CreateResourceFormValues,
-  ResourceTypeOptions,
   useCreateResourceForm,
 } from "@/util/forms/createResource";
 import { useAppDispatch } from "@/util/redux/hooks";
 import { addBlock } from "@/util/redux/slice/roadmapEditorSlice";
-import { trpc } from "@/util/trpc";
 
-function Suggestions({
-  query,
-  onSelect,
-}: {
-  query: string;
-  onSelect: (resource: Resource) => void;
-}) {
-  const { data } = trpc.useQuery([
-    "resource.suggestions",
-    {
-      query,
-    },
-  ]);
-
-  return (
-    <Accordion allowToggle defaultIndex={0}>
-      <AccordionItem>
-        <h2>
-          <AccordionButton>
-            <Box flex="1" textAlign="left">
-              Suggestions
-            </Box>
-
-            <AccordionIcon />
-          </AccordionButton>
-        </h2>
-
-        <AccordionPanel>
-          <Stack spacing={4}>
-            {data &&
-              data.map((resource) => (
-                <Flex key={resource.id}>
-                  <Box flex="1">
-                    <NextLink href={`/resource/${resource.id}`} passHref>
-                      <Link target="_blank">
-                        <Heading size="sm">{resource.title}</Heading>
-                      </Link>
-                    </NextLink>
-                    <Text>{resource.url}</Text>
-                  </Box>
-
-                  <Button
-                    colorScheme="blue"
-                    variant="outline"
-                    onClick={() => onSelect(resource)}
-                    size="sm"
-                  >
-                    Select
-                  </Button>
-                </Flex>
-              ))}
-          </Stack>
-        </AccordionPanel>
-      </AccordionItem>
-    </Accordion>
-  );
-}
+import NoteBlockCreator from "./NoteBlockCreator";
+import ResourceBlockCreator from "./ResourceBlockCreator";
 
 function BlockModal({
   isOpen,
@@ -105,23 +36,23 @@ function BlockModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const {
-    register,
-    watch,
-    handleSubmit,
-    formState: { errors },
-  } = useCreateResourceForm();
+  const resourceForm = useCreateResourceForm();
+  const noteForm = useCreateNoteForm();
+
+  const [tabIndex, setTabIndex] = useState(0);
 
   const dispatch = useAppDispatch();
 
-  const getFieldControlProps = (
-    name: keyof CreateResourceFormValues,
-  ): FormControlOptions => ({
-    isInvalid: !!errors[name],
-    isRequired: true,
-  });
+  // Reset the form when the modal is closed
+  // This can be changed later to save the form state and reset when submitted
+  useEffect(() => {
+    if (!isOpen) {
+      resourceForm.reset();
+      noteForm.reset();
+    }
+  }, [isOpen, resourceForm, noteForm]);
 
-  const onCreate = (values: CreateResourceFormValues) => {
+  const onCreateResource = (values: CreateResourceFormValues) => {
     dispatch(
       addBlock({
         editorId: Math.random().toString(36).substring(7),
@@ -133,17 +64,30 @@ function BlockModal({
     onClose();
   };
 
-  const onSelect = (resource: Resource) => {
+  const onCreateNote = (values: CreateNoteFormValues) => {
     dispatch(
       addBlock({
         editorId: Math.random().toString(36).substring(7),
-        kind: "resource",
-        ...resource,
+        kind: "note",
+        ...values,
       }),
     );
 
     onClose();
   };
+
+  const tabs = [
+    {
+      label: "Resource",
+      onSubmit: resourceForm.handleSubmit(onCreateResource),
+      component: <ResourceBlockCreator form={resourceForm} onClose={onClose} />,
+    },
+    {
+      label: "Note",
+      onSubmit: noteForm.handleSubmit(onCreateNote),
+      component: <NoteBlockCreator form={noteForm} onClose={onClose} />,
+    },
+  ];
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xl">
@@ -152,47 +96,28 @@ function BlockModal({
         <ModalHeader>Create Block</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Stack spacing={4}>
-            <FormControl {...getFieldControlProps("title")}>
-              <FormLabel>Title</FormLabel>
-              <Input {...register("title")} />
-              <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
-            </FormControl>
+          <Tabs index={tabIndex} onChange={setTabIndex}>
+            <TabList>
+              {tabs.map((tab) => (
+                <Tab key={tab.label}>{tab.label}</Tab>
+              ))}
+            </TabList>
 
-            <FormControl {...getFieldControlProps("description")}>
-              <FormLabel>Description</FormLabel>
-              <Textarea {...register("description")} />
-              <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
-            </FormControl>
-
-            <FormControl {...getFieldControlProps("url")}>
-              <FormLabel>URL</FormLabel>
-              <Input {...register("url")} />
-              <FormErrorMessage>{errors.url?.message}</FormErrorMessage>
-            </FormControl>
-
-            <FormControl {...getFieldControlProps("type")}>
-              <FormLabel>Type</FormLabel>
-              <Select {...register("type")}>
-                {ResourceTypeOptions.map(({ value, label }) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
-              </Select>
-              <FormErrorMessage>{errors.type?.message}</FormErrorMessage>
-            </FormControl>
-
-            <Suggestions query={watch("title")} onSelect={onSelect} />
-          </Stack>
+            <TabPanels>
+              {tabs.map((tab) => (
+                <TabPanel key={tab.label}>{tab.component}</TabPanel>
+              ))}
+            </TabPanels>
+          </Tabs>
         </ModalBody>
 
         <ModalFooter>
           <Button onClick={onClose} mr={3}>
             Cancel
           </Button>
-          <Button colorScheme="blue" onClick={handleSubmit(onCreate)}>
-            Save
+
+          <Button colorScheme="blue" onClick={tabs[tabIndex].onSubmit}>
+            Create
           </Button>
         </ModalFooter>
       </ModalContent>
