@@ -1,65 +1,47 @@
 import {
   Avatar,
   Box,
+  Button,
   Container,
   Grid,
   GridItem,
   Heading,
-  Link,
   Text,
 } from "@chakra-ui/react";
-import { Resource } from "@prisma/client";
 import { GetServerSidePropsContext } from "next";
-import NextLink from "next/link";
 import { Fragment } from "react";
 
 import Layout from "@/components/layout/Layout";
-import TypeTag from "@/components/resource/TypeTag";
+import NoteBlock from "@/components/roadmap/NoteBlock";
+import ResourceBlock from "@/components/roadmap/ResourceBlock";
+import pluralize from "@/util/functions/pluralize";
+import roadmapEditorSlice from "@/util/redux/slice/roadmapEditorSlice";
 import { prisma } from "@/util/server/db/prisma";
+import { trpc } from "@/util/trpc";
 import InferNextProps from "@/util/types/InferNextProps";
 
-function ResourceBlock({ resource }: { resource: Resource }) {
-  return (
-    <>
-      <TypeTag size="sm" type={resource.type} mb={2} />
-      <NextLink href={`/resource/${resource.id}`} passHref>
-        <Link>
-          <Heading size="md" mb={2}>
-            {resource.title}
-          </Heading>
-        </Link>
-      </NextLink>
-      <Text>{resource.description}</Text>
-    </>
-  );
-}
-
-function NoteBlock({
-  content,
-  title,
-}: {
-  content: string;
-  title: string | null;
-}) {
-  return (
-    <>
-      {title && (
-        <Heading size="md" mb={2}>
-          {title}
-        </Heading>
-      )}
-      <Text>{content}</Text>
-    </>
-  );
-}
-
 function Roadmap({
+  id,
   title,
   author,
   description,
   blocks,
+  _count: { learners },
 }: InferNextProps<typeof getServerSideProps>) {
   const spacing = 4;
+
+  const utils = trpc.useContext();
+  const subscribe = trpc.useMutation("roadmap.toggleSubscribe");
+  const { data: isSubscribed, isLoading } = trpc.useQuery([
+    "roadmap.isSubscribed",
+    id,
+  ]);
+
+  const handleSubscribe = async () => {
+    await subscribe.mutateAsync(id);
+
+    utils.invalidateQueries(["roadmap.isSubscribed", id]);
+  };
 
   return (
     <Layout variant="bare">
@@ -70,7 +52,19 @@ function Roadmap({
         <Text fontSize="lg" mb={4}>
           <Avatar size="xs" ml={2} src={author.image ?? ""} /> {author.name}
         </Text>
-        <Text>{description}</Text>
+        <Text mb={8}>{description}</Text>
+
+        <Button
+          colorScheme="blue"
+          variant={isSubscribed ? "outline" : "solid"}
+          onClick={handleSubscribe}
+          isLoading={isLoading}
+          mb={2}
+        >
+          {isSubscribed ? "Leave Roadmap" : "Begin Roadmap"}
+        </Button>
+
+        <Text>{pluralize(learners, "learner")}</Text>
       </Box>
 
       <Container maxW="container.xl" mt={16}>
@@ -133,6 +127,11 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         id: Number(id),
       },
       include: {
+        _count: {
+          select: {
+            learners: true,
+          },
+        },
         blocks: {
           orderBy: {
             order: "asc",
