@@ -116,8 +116,8 @@ function Navbar() {
   const { status, data: session } = useSession();
 
   return (
-    <Box as="nav" w="full" borderBottomWidth={1}>
-      <Container maxW="container.xl" py={2}>
+    <Flex as="nav" w="full" borderBottomWidth={1} h="64px" align="center">
+      <Container maxW="container.xl">
         <Flex align="center">
           <NextLink href="/" passHref>
             <Link as={Heading} size="lg">
@@ -153,7 +153,7 @@ function Navbar() {
           </HStack>
         </Flex>
       </Container>
-    </Box>
+    </Flex>
   );
 }
 

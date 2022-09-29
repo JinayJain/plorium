@@ -74,7 +74,6 @@ function Roadmap({
       </Box>
 
       <Container maxW="container.xl" mt={16}>
-        {/* Create the left timeline column */}
         <Grid templateColumns="40px 1fr" rowGap={spacing} columnGap={4}>
           {blocks.map((block, index) => (
             <Fragment key={index}>

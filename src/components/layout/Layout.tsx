@@ -24,19 +24,15 @@ function Layout({
         />
       </Head>
       <Navbar />
-      <main>
+      <Box as="main" minH="calc(100vh - 64px)" overflow="auto" py={4}>
         {variant === "default" ? (
-          <Container
-            maxW={props.maxW || "container.xl"}
-            py={props.py ?? 8}
-            {...props}
-          >
+          <Container maxW={props.maxW || "container.xl"} {...props}>
             {children}
           </Container>
         ) : (
           children
         )}
-      </main>
+      </Box>
       <Footer />
     </Box>
   );
