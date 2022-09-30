@@ -15,6 +15,7 @@ import {
   CreateResourceFormValues,
   ResourceTypeOptions,
 } from "@/util/forms/createResource";
+import useDebounce from "@/util/hooks/useDebounce";
 import { useAppDispatch } from "@/util/redux/hooks";
 import { addBlock } from "@/util/redux/slice/roadmapEditorSlice";
 
@@ -31,6 +32,8 @@ function ResourceBlockCreator({
   form: UseFormReturn<CreateResourceFormValues>;
   onClose: () => void;
 }) {
+  const query = useDebounce(watch("title"), 500);
+
   const getFieldControlProps = (
     name: keyof CreateResourceFormValues,
   ): FormControlOptions => ({
@@ -84,7 +87,7 @@ function ResourceBlockCreator({
         <FormErrorMessage>{errors.type?.message}</FormErrorMessage>
       </FormControl>
 
-      <Suggestions query={watch("title")} onSelect={onSelect} />
+      <Suggestions query={query} onSelect={onSelect} />
     </Stack>
   );
 }

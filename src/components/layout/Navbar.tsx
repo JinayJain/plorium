@@ -104,9 +104,6 @@ function CreateMenu() {
         <NextLink href="/resource/create">
           <MenuItem icon={<FaGlobe />}>Resource</MenuItem>
         </NextLink>
-        <NextLink href="/project/create">
-          <MenuItem icon={<FaHammer />}>Project</MenuItem>
-        </NextLink>
       </MenuList>
     </Menu>
   );

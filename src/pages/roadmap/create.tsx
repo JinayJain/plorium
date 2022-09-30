@@ -1,5 +1,7 @@
 import {
   Button,
+  ButtonGroup,
+  Divider,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -9,6 +11,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
+import NextLink from "next/link";
 import { DragDropContext, resetServerContext } from "react-beautiful-dnd";
 
 import Layout from "@/components/layout/Layout";
@@ -73,7 +76,6 @@ function CreateRoadmap() {
         <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
       </FormControl>
 
-      <Heading size="md">Blocks</Heading>
       <DragDropContext
         onDragEnd={(result) => {
           if (!result.destination) {
@@ -90,8 +92,22 @@ function CreateRoadmap() {
       >
         <BlocksEditor />
       </DragDropContext>
+      <Divider my={4} />
 
-      <Button onClick={handleSubmit(onSubmit)}>Create</Button>
+      <ButtonGroup float="right" mt={4} spacing={2}>
+        <NextLink href="/roadmap" passHref>
+          <Button as="a" variant="outline">
+            Cancel
+          </Button>
+        </NextLink>
+        <Button
+          colorScheme="green"
+          onClick={handleSubmit(onSubmit)}
+          isLoading={createRoadmapMutation.isLoading}
+        >
+          Create
+        </Button>
+      </ButtonGroup>
     </Layout>
   );
 }

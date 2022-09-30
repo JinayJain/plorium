@@ -112,12 +112,12 @@ function BlockModal({
         </ModalBody>
 
         <ModalFooter>
-          <Button onClick={onClose} mr={3}>
+          <Button variant="outline" onClick={onClose} mr={3}>
             Cancel
           </Button>
 
-          <Button colorScheme="blue" onClick={tabs[tabIndex].onSubmit}>
-            Create
+          <Button colorScheme="green" onClick={tabs[tabIndex].onSubmit}>
+            Add
           </Button>
         </ModalFooter>
       </ModalContent>

@@ -26,6 +26,7 @@ import {
   ResourceTypeOptions,
   useCreateResourceForm,
 } from "@/util/forms/createResource";
+import useDebounce from "@/util/hooks/useDebounce";
 import { trpc } from "@/util/trpc";
 
 function CreateResource() {
@@ -41,12 +42,8 @@ function CreateResource() {
     formState: { errors },
   } = useCreateResourceForm();
 
-  const suggestions = trpc.useQuery([
-    "resource.suggestions",
-    {
-      query: watch("title"),
-    },
-  ]);
+  const query = useDebounce(watch("title"), 500);
+  const suggestions = trpc.useQuery(["resource.suggestions", { query }]);
 
   const onSubmit = async (values: CreateResourceFormValues) => {
     const resource = await createResourceMutation.mutateAsync(values);

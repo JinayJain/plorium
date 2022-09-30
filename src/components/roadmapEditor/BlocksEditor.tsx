@@ -1,6 +1,8 @@
+import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
+  Divider,
   Flex,
   Heading,
   Icon,
@@ -64,51 +66,71 @@ function BlocksEditor() {
   return (
     <Droppable droppableId="blocks">
       {(provided) => (
-        <Box ref={provided.innerRef} {...provided.droppableProps}>
-          {blocks.map((block, index) => (
-            <Draggable
-              key={block.editorId}
-              draggableId={block.editorId}
-              index={index}
-            >
-              {(provided) => (
-                <Flex
-                  ref={provided.innerRef}
-                  {...provided.draggableProps}
-                  mb={4}
-                >
-                  <Flex align="center" justify="center" mx={2}>
-                    <Box
-                      {...provided.dragHandleProps}
-                      p={1}
-                      _hover={{ bg: "gray.100" }}
-                    >
-                      <Icon as={FaGripVertical} />
-                    </Box>
+        <Flex
+          direction="column"
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+        >
+          <Heading size="md">Blocks</Heading>
+          <Divider my={4} />
+
+          {blocks.length === 0 ? (
+            <Box textAlign="center" mb={4}>
+              <Text color="gray">Start by adding a block to your roadmap</Text>
+            </Box>
+          ) : (
+            blocks.map((block, index) => (
+              <Draggable
+                key={block.editorId}
+                draggableId={block.editorId}
+                index={index}
+              >
+                {(provided) => (
+                  <Flex
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    mb={4}
+                  >
+                    <Flex align="center" justify="center" mx={2}>
+                      <Box
+                        {...provided.dragHandleProps}
+                        p={1}
+                        _hover={{ bg: "gray.100" }}
+                      >
+                        <Icon as={FaGripVertical} />
+                      </Box>
+                    </Flex>
+                    <Box p={4} flex="1" borderWidth={1} bg="white">
+                      {block.kind === "resource" ? (
+                        <ResourceBlockPreview
+                          {...block.resource}
+                          isNew={!block.resource.id}
+                        />
+                      ) : block.kind === "note" ? (
+                        <NoteBlockPreview
+                          title={block.note.title}
+                          content={block.note.content}
+                        />
+                      ) : null}
+                    </Box>{" "}
                   </Flex>
-                  <Box p={4} flex="1" borderWidth={1} bg="white">
-                    {block.kind === "resource" ? (
-                      <ResourceBlockPreview
-                        {...block.resource}
-                        isNew={!block.resource.id}
-                      />
-                    ) : block.kind === "note" ? (
-                      <NoteBlockPreview
-                        title={block.note.title}
-                        content={block.note.content}
-                      />
-                    ) : null}
-                  </Box>{" "}
-                </Flex>
-              )}
-            </Draggable>
-          ))}
+                )}
+              </Draggable>
+            ))
+          )}
           {provided.placeholder}
 
-          <Button onClick={onOpen}>Add</Button>
-
+          <Button
+            colorScheme="green"
+            alignSelf="center"
+            variant="outline"
+            onClick={() => onOpen()}
+            leftIcon={<AddIcon />}
+          >
+            Add Block
+          </Button>
           <BlockModal isOpen={isOpen} onClose={onClose} />
-        </Box>
+        </Flex>
       )}
     </Droppable>
   );
