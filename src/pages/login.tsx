@@ -11,7 +11,7 @@ import { authOptions } from "./api/auth/[...nextauth]";
 
 const Login = () => {
   return (
-    <Layout>
+    <Layout title="Login">
       <Center>
         <Button
           onClick={() => signIn("google")}

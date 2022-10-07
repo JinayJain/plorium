@@ -12,6 +12,7 @@ import { GetServerSidePropsContext } from "next";
 import { Fragment } from "react";
 
 import Layout from "@/components/layout/Layout";
+import BlockContainer from "@/components/roadmap/BlockContainer";
 import NoteBlock from "@/components/roadmap/NoteBlock";
 import ResourceBlock from "@/components/roadmap/ResourceBlock";
 import pluralize from "@/util/functions/pluralize";
@@ -44,7 +45,7 @@ function Roadmap({
   };
 
   return (
-    <Layout variant="bare">
+    <Layout variant="bare" title={[title, "Roadmap"]}>
       <Box textAlign="center" mt={16}>
         <Heading mb={4} size="2xl">
           {title}
@@ -70,47 +71,23 @@ function Roadmap({
       <Container maxW="container.xl" mt={16}>
         <Grid templateColumns="40px 1fr" rowGap={spacing} columnGap={4}>
           {blocks.map((block, index) => (
-            <Fragment key={index}>
-              <GridItem colSpan={1} position="relative" userSelect="none">
-                <Box
-                  position="absolute"
-                  top={index === 0 ? "50%" : -spacing / 2}
-                  bottom={index === blocks.length - 1 ? "50%" : -spacing / 2}
-                  left="50%"
-                  transform="translateX(-50%)"
-                  width="2px"
-                  bg="gray.200"
+            <BlockContainer
+              key={block.id}
+              label={index + 1}
+              isFirst={index === 0}
+              isLast={index === blocks.length - 1}
+              spacing={spacing}
+            >
+              {block.resourceBlock && (
+                <ResourceBlock resource={block.resourceBlock.resource} />
+              )}
+              {block.noteBlock && (
+                <NoteBlock
+                  content={block.noteBlock.content}
+                  title={block.noteBlock.title}
                 />
-
-                <Box
-                  position="absolute"
-                  top="50%"
-                  left="50%"
-                  transform="translate(-50%, -50%)"
-                  bg="white"
-                  borderRadius="full"
-                  borderWidth={1}
-                  w={10}
-                  h={10}
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  {index + 1}
-                </Box>
-              </GridItem>
-              <GridItem colSpan={1} borderWidth={1} p={4} borderRadius="md">
-                {block.resourceBlock && (
-                  <ResourceBlock resource={block.resourceBlock.resource} />
-                )}
-                {block.noteBlock && (
-                  <NoteBlock
-                    content={block.noteBlock.content}
-                    title={block.noteBlock.title}
-                  />
-                )}
-              </GridItem>
-            </Fragment>
+              )}
+            </BlockContainer>
           ))}
         </Grid>
       </Container>

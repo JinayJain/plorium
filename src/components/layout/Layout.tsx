@@ -7,17 +7,20 @@ import Navbar from "./Navbar";
 function Layout({
   children,
   variant = "default",
-  title = "Plorium",
+  title,
   ...props
 }: {
   children: React.ReactNode;
   variant?: "default" | "bare";
-  title?: string;
-} & ContainerProps) {
+  title?: string | string[];
+} & Omit<ContainerProps, "title">) {
+  const titleWords = title ? (Array.isArray(title) ? title : [title]) : [];
+  const titleArray = [...titleWords, "Plorium"];
+
   return (
     <Box>
       <Head>
-        <title>{title}</title>
+        <title>{titleArray.join(" | ")}</title>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no"

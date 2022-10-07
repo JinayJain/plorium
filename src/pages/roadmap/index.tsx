@@ -7,7 +7,7 @@ import InferNextProps from "@/util/types/InferNextProps";
 
 function Roadmaps({ roadmaps }: InferNextProps<typeof getServerSideProps>) {
   return (
-    <Layout>
+    <Layout title="Roadmaps">
       <Heading>Roadmaps</Heading>
 
       <Stack spacing={4}>

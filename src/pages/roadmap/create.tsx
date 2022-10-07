@@ -61,7 +61,7 @@ function CreateRoadmap() {
   };
 
   return (
-    <Layout>
+    <Layout title="Create Roadmap">
       <Heading mb={4}>Create Roadmap</Heading>
 
       <FormControl {...getFieldControlProps("title")} mb={4}>

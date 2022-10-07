@@ -58,7 +58,7 @@ function CreateResource() {
   };
 
   return (
-    <Layout>
+    <Layout title="Create Resource">
       <Flex direction={{ base: "column", md: "row" }}>
         <Box flex={3}>
           <Heading mb={4}>Create Resource</Heading>

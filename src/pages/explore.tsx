@@ -1,45 +1,18 @@
-import {
-  Box,
-  Heading,
-  Link,
-  LinkBox,
-  LinkOverlay,
-  SimpleGrid,
-  Spacer,
-  Text,
-} from "@chakra-ui/react";
-import NextLink from "next/link";
+import { Heading, SimpleGrid } from "@chakra-ui/react";
 
 import Layout from "@/components/layout/Layout";
-import pluralize from "@/util/functions/pluralize";
+import RoadmapPreviewCard from "@/components/roadmap/RoadmapPreviewCard";
 import { prisma } from "@/util/server/db/prisma";
 import InferNextProps from "@/util/types/InferNextProps";
 
 function Explore({ roadmaps }: InferNextProps<typeof getServerSideProps>) {
   return (
-    <Layout>
-      <Heading>Explore</Heading>
+    <Layout title="Explore">
+      <Heading my={4}>Explore</Heading>
 
       <SimpleGrid minChildWidth={300} spacing={4}>
         {roadmaps.map((roadmap) => (
-          <LinkBox
-            display="flex"
-            flexDir="column"
-            key={roadmap.id}
-            borderWidth={1}
-            p={4}
-            rounded="sm"
-          >
-            <NextLink href={`/roadmap/${roadmap.id}`} passHref>
-              <LinkOverlay>
-                <Heading size="sm">{roadmap.title}</Heading>
-              </LinkOverlay>
-            </NextLink>
-            <Text>{roadmap.description}</Text>
-            <Text color="gray.500" mt="auto" pt={2}>
-              {pluralize(roadmap._count.learners, "learner")}
-            </Text>
-          </LinkBox>
+          <RoadmapPreviewCard key={roadmap.id} roadmap={roadmap} />
         ))}
       </SimpleGrid>
     </Layout>
@@ -48,12 +21,24 @@ function Explore({ roadmaps }: InferNextProps<typeof getServerSideProps>) {
 
 export const getServerSideProps = async () => {
   const roadmaps = await prisma.roadmap.findMany({
-    take: 10,
     include: {
       _count: {
         select: {
           learners: true,
+          blocks: {
+            where: {
+              resourceBlock: {
+                isNot: null,
+              },
+            },
+          },
         },
+      },
+    },
+
+    orderBy: {
+      learners: {
+        _count: "desc",
       },
     },
   });

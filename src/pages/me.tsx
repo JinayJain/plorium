@@ -4,7 +4,7 @@ import Layout from "@/components/layout/Layout";
 
 function Profile() {
   return (
-    <Layout>
+    <Layout title="Profile">
       <Heading>Profile</Heading>
     </Layout>
   );

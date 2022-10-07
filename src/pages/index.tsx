@@ -18,8 +18,8 @@ const Home: NextPage = () => {
             for your self-learning journey
           </Heading>
           <Text fontSize="xl" color="gray" mb={8}>
-            Plorium helps you save hours of searching for resources, so you can
-            spend more time learning.
+            Find the best resources to learn any topic. Curated by experts, and
+            vetted by people like you.
           </Text>
           <Link href="/explore" passHref>
             <Button as="a" rightIcon={<FaArrowRight />} colorScheme="green">

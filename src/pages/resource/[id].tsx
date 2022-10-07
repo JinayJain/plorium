@@ -5,6 +5,7 @@ import NextLink from "next/link";
 
 import Layout from "@/components/layout/Layout";
 import TypeTag from "@/components/resource/TypeTag";
+import RoadmapPreviewCard from "@/components/roadmap/RoadmapPreviewCard";
 import { prisma } from "@/util/server/db/prisma";
 import InferNextProps from "@/util/types/InferNextProps";
 
@@ -13,7 +14,7 @@ function ViewResource({
   roadmaps,
 }: InferNextProps<typeof getServerSideProps>) {
   return (
-    <Layout>
+    <Layout title={[resource.title, "Resource"]}>
       <Box borderWidth="1px" borderRadius="lg" p={[8, 8, 16]}>
         <TypeTag type={resource.type} mb={2} />
         <Heading size="2xl" my={2}>
@@ -48,17 +49,7 @@ function ViewResource({
 
         <SimpleGrid minChildWidth="300px" spacing={4} mt={4}>
           {roadmaps.map((roadmap) => (
-            <Box key={roadmap.id} p={4} borderWidth="1px" borderRadius="md">
-              <NextLink href={`/roadmap/${roadmap.id}`} passHref>
-                <Link>
-                  <Heading size="sm">{roadmap.title}</Heading>
-                </Link>
-              </NextLink>
-
-              <Text color="gray" mt={2}>
-                {roadmap.description}
-              </Text>
-            </Box>
+            <RoadmapPreviewCard key={roadmap.id} roadmap={roadmap} />
           ))}
         </SimpleGrid>
       </Box>
@@ -85,6 +76,20 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         some: {
           resourceBlock: {
             resourceId: idNumber,
+          },
+        },
+      },
+    },
+    include: {
+      _count: {
+        select: {
+          learners: true,
+          blocks: {
+            where: {
+              resourceBlock: {
+                isNot: null,
+              },
+            },
           },
         },
       },

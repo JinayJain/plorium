@@ -6,7 +6,7 @@ import InferNextProps from "@/util/types/InferNextProps";
 
 function Resources({ resources }: InferNextProps<typeof getServerSideProps>) {
   return (
-    <Layout>
+    <Layout title="Resources">
       <Heading>Resources</Heading>
       <Stack spacing={4}>
         {resources.map((resource) => (

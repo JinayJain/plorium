@@ -1,4 +1,4 @@
-import { Heading, Link, Text } from "@chakra-ui/react";
+import { Heading, Link, LinkOverlay, Text } from "@chakra-ui/react";
 import { Resource } from "@prisma/client";
 import NextLink from "next/link";
 
@@ -9,11 +9,11 @@ function ResourceBlock({ resource }: { resource: Resource }) {
     <>
       <TypeTag size="sm" type={resource.type} mb={2} />
       <NextLink href={`/resource/${resource.id}`} passHref>
-        <Link>
+        <LinkOverlay>
           <Heading size="md" mb={2}>
             {resource.title}
           </Heading>
-        </Link>
+        </LinkOverlay>
       </NextLink>
       <Text>{resource.description}</Text>
     </>
