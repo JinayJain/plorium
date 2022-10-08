@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { Roadmap } from "@prisma/client";
 import NextLink from "next/link";
+import React from "react";
 
 import pluralize from "@/util/functions/pluralize";
 
@@ -15,12 +16,31 @@ function RoadmapPreviewCard({
   roadmap,
 }: {
   roadmap: Roadmap & {
-    _count: {
-      learners: number;
-      blocks: number;
+    _count?: {
+      learners?: number;
+      blocks?: number;
     };
   };
 }) {
+  const stats = [
+    {
+      label: "learner",
+      value: roadmap._count?.learners,
+    },
+    {
+      label: "resource",
+      value: roadmap._count?.blocks,
+    },
+  ];
+  const filteredStats = stats.filter(
+    (
+      stat,
+    ): stat is {
+      label: string;
+      value: number;
+    } => stat.value !== undefined,
+  );
+
   return (
     <LinkBox
       display="flex"
@@ -39,11 +59,10 @@ function RoadmapPreviewCard({
           </LinkOverlay>
         </NextLink>
         <Text fontSize="sm" color="gray.500" mt="auto" pt={2}>
-          {pluralize(roadmap._count.learners, "learner")} ·{" "}
-          {pluralize(roadmap._count.blocks, "resource")}
+          {filteredStats
+            .map((stat) => pluralize(stat.value, stat.label))
+            .join(" · ")}
         </Text>
-
-        <Text fontSize="sm" color="gray.500"></Text>
       </Box>
 
       <Divider />

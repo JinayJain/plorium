@@ -7,6 +7,7 @@ import {
   GridItem,
   Heading,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { GetServerSidePropsContext } from "next";
 import { Fragment } from "react";
@@ -31,8 +32,17 @@ function Roadmap({
 }: InferNextProps<typeof getServerSideProps>) {
   const spacing = 4;
 
+  const toast = useToast();
   const utils = trpc.useContext();
-  const subscribe = trpc.useMutation("roadmap.toggleSubscribe");
+  const subscribe = trpc.useMutation("roadmap.toggleSubscribe", {
+    onError(error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        status: "error",
+      });
+    },
+  });
   const { data: isSubscribed, isLoading } = trpc.useQuery([
     "roadmap.isSubscribed",
     id,

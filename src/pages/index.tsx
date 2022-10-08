@@ -1,11 +1,14 @@
-import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, SimpleGrid, Text } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa";
 
 import Layout from "@/components/layout/Layout";
+import RoadmapPreviewCard from "@/components/roadmap/RoadmapPreviewCard";
+import { prisma } from "@/util/server/db/prisma";
+import InferNextProps from "@/util/types/InferNextProps";
 
-const Home: NextPage = () => {
+const Home = ({ roadmaps }: InferNextProps<typeof getStaticProps>) => {
   return (
     <Layout>
       <Flex justify="center" align="center" h={400}>
@@ -28,8 +31,42 @@ const Home: NextPage = () => {
           </Link>
         </Box>
       </Flex>
+
+      <Box mt={16}>
+        <Heading size="lg" mb={8}>
+          Roadmaps for any topic
+        </Heading>
+        <SimpleGrid minChildWidth={300} spacing={4}>
+          {roadmaps.map((roadmap) => (
+            <RoadmapPreviewCard key={roadmap.id} roadmap={roadmap} />
+          ))}
+        </SimpleGrid>
+      </Box>
     </Layout>
   );
+};
+
+export const getStaticProps = async () => {
+  const roadmaps = await prisma.roadmap.findMany({
+    take: 10,
+    include: {
+      _count: {
+        select: {
+          blocks: { where: { resourceBlock: { isNot: null } } },
+          learners: true,
+        },
+      },
+    },
+    orderBy: {
+      learners: { _count: "desc" },
+    },
+  });
+
+  return {
+    props: {
+      roadmaps,
+    },
+  };
 };
 
 export default Home;

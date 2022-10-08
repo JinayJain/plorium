@@ -30,9 +30,17 @@ import useDebounce from "@/util/hooks/useDebounce";
 import { trpc } from "@/util/trpc";
 
 function CreateResource() {
-  const createResourceMutation = trpc.useMutation("resource.create");
-  const router = useRouter();
   const toast = useToast();
+  const createResourceMutation = trpc.useMutation("resource.create", {
+    onError(error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        status: "error",
+      });
+    },
+  });
+  const router = useRouter();
 
   const {
     register,
