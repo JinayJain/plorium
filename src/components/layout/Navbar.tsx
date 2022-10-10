@@ -33,14 +33,6 @@ const NAV_LINKS = [
     href: "/explore",
   },
   {
-    name: "Roadmaps",
-    href: "/roadmap",
-  },
-  {
-    name: "Resources",
-    href: "/resource",
-  },
-  {
     name: "About",
     href: "/about",
   },

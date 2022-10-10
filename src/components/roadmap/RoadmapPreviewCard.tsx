@@ -45,7 +45,6 @@ function RoadmapPreviewCard({
     <LinkBox
       display="flex"
       flexDir="column"
-      key={roadmap.id}
       borderWidth={1}
       rounded="md"
       _hover={{
