@@ -61,12 +61,19 @@ export const getServerSideProps = async () => {
   });
 
   const resources = await prisma.resource.findMany({
+    include: {
+      _count: {
+        select: {
+          votes: true,
+        },
+      },
+    },
     orderBy: {
-      blocks: {
+      votes: {
         _count: "desc",
       },
     },
-    take: 10,
+    take: 20,
   });
 
   return {

@@ -91,9 +91,10 @@ model Roadmap {
 }
 
 model Block {
-  id        Int @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   roadmapId Int
   order     Int
+  kind      BlockType
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())

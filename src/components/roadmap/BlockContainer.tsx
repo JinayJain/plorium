@@ -1,17 +1,16 @@
 import { Box, GridItem, LinkBox } from "@chakra-ui/react";
 import { Fragment } from "react";
 
-import NoteBlock from "./NoteBlock";
-import ResourceBlock from "./ResourceBlock";
-
 function BlockContainer({
   label,
+  hoverable,
   isLast,
   isFirst,
   spacing,
   children,
 }: {
   label: string | number;
+  hoverable: boolean;
   isLast: boolean;
   isFirst: boolean;
   spacing: number;
@@ -49,6 +48,13 @@ function BlockContainer({
       </GridItem>
       <GridItem
         as={LinkBox}
+        _hover={
+          hoverable
+            ? {
+                borderColor: "gray.500",
+              }
+            : undefined
+        }
         colSpan={1}
         borderWidth={1}
         p={4}

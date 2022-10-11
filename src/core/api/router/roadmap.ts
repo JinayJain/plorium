@@ -35,6 +35,7 @@ const roadmapRouter = createRouter()
                   data: {
                     block: {
                       create: {
+                        kind: "NOTE",
                         roadmapId: roadmap.id,
                         order: index,
                       },
@@ -57,6 +58,7 @@ const roadmapRouter = createRouter()
                     },
                     block: {
                       create: {
+                        kind: "RESOURCE",
                         roadmapId: roadmap.id,
                         order: index,
                       },

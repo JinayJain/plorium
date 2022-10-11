@@ -84,6 +84,7 @@ function Roadmap({
           {blocks.map((block, index) => (
             <BlockContainer
               key={block.id}
+              hoverable={!!block.resourceBlock}
               label={index + 1}
               isFirst={index === 0}
               isLast={index === blocks.length - 1}
@@ -127,7 +128,15 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
           include: {
             resourceBlock: {
               include: {
-                resource: true,
+                resource: {
+                  include: {
+                    _count: {
+                      select: {
+                        votes: true,
+                      },
+                    },
+                  },
+                },
               },
             },
             noteBlock: true,

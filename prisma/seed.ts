@@ -41,6 +41,25 @@ async function main() {
       },
     });
 
+    const numVotes = faker.datatype.number({ min: 0, max: 20 });
+
+    for (let j = 0; j < numVotes; j++) {
+      const userId = faker.helpers.arrayElement(userIds);
+      await prisma.resourceVote.upsert({
+        where: {
+          resourceId_userId: {
+            resourceId: resource.id,
+            userId,
+          },
+        },
+        create: {
+          resourceId: resource.id,
+          userId,
+        },
+        update: {},
+      });
+    }
+
     resourceIds.push(resource.id);
   }
 
@@ -56,6 +75,25 @@ async function main() {
       },
     });
 
+    const numLearners = faker.datatype.number({ min: 0, max: 20 });
+
+    for (let j = 0; j < numLearners; j++) {
+      const userId = faker.helpers.arrayElement(userIds);
+      await prisma.roadmapLearner.upsert({
+        create: {
+          roadmapId: roadmap.id,
+          userId,
+        },
+        update: {},
+        where: {
+          roadmapId_userId: {
+            roadmapId: roadmap.id,
+            userId,
+          },
+        },
+      });
+    }
+
     const numBlocks = faker.datatype.number({ min: 1, max: 10 });
 
     for (let j = 0; j < numBlocks; j++) {
@@ -67,6 +105,7 @@ async function main() {
             data: {
               block: {
                 create: {
+                  kind: "RESOURCE",
                   order: j,
                   roadmapId: roadmap.id,
                 },
@@ -85,6 +124,7 @@ async function main() {
             data: {
               block: {
                 create: {
+                  kind: "NOTE",
                   order: j,
                   roadmapId: roadmap.id,
                 },
