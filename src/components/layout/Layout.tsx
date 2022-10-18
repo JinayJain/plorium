@@ -39,7 +39,7 @@ function Layout({
     searchParams.append("type", ogProps.type);
   }
 
-  const ogUrl = `https://plorium.vercel.app/api/og?${searchParams.toString()}`;
+  const ogUrl = `https://plorium.com/api/og?${searchParams.toString()}`;
 
   return (
     <Box>
