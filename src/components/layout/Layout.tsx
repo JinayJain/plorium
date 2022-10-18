@@ -60,6 +60,10 @@ function Layout({
         <meta property="og:site_name" content="Plorium" />
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:site" content="@plorium" />
+
+        <meta name="twitter:title" content="Plorium" />
+        <meta name="twitter:description" content={DESCRIPTION} />
+        <meta name="twitter:image" content={ogUrl} />
       </Head>
       <Navbar />
       <Box as="main" minH="calc(100vh - 64px)" overflow="auto" py={4}>
