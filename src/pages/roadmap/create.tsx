@@ -21,6 +21,7 @@ import {
 } from "@/util/forms/createRoadmap";
 import { useAppDispatch, useAppSelector } from "@/util/redux/hooks";
 import { moveBlock } from "@/util/redux/slice/roadmapEditorSlice";
+import { withAuth } from "@/util/server/withAuth";
 import { trpc } from "@/util/trpc";
 
 const BlocksEditor = dynamic(
@@ -112,12 +113,12 @@ function CreateRoadmap() {
   );
 }
 
-export async function getServerSideProps() {
+export const getServerSideProps = withAuth(() => {
   resetServerContext();
 
   return {
     props: {},
   };
-}
+});
 
 export default CreateRoadmap;

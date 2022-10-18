@@ -12,7 +12,6 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { GetServerSidePropsContext } from "next";
-import NextLink from "next/link";
 import { FaChevronUp } from "react-icons/fa";
 
 import Layout from "@/components/layout/Layout";
@@ -65,7 +64,7 @@ function ViewResource({
                   aria-label="Upvote"
                   icon={<FaChevronUp />}
                   colorScheme="green"
-                  variant={data.userVoted ? "solid" : "ghost"}
+                  variant={data.userVoted ? "solid" : "outline"}
                   size="md"
                   onClick={handleVote}
                 />

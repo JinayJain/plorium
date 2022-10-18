@@ -1,6 +1,7 @@
 import { Heading } from "@chakra-ui/react";
 
 import Layout from "@/components/layout/Layout";
+import { withAuth } from "@/util/server/withAuth";
 
 function Profile() {
   return (
@@ -10,4 +11,5 @@ function Profile() {
   );
 }
 
+export const getServerSideProps = withAuth();
 export default Profile;

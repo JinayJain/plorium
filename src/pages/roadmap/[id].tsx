@@ -57,7 +57,7 @@ function Roadmap({
 
   return (
     <Layout variant="bare" title={[title, "Roadmap"]}>
-      <Box textAlign="center" mt={16}>
+      <Box textAlign="center" mt={16} maxW="container.xl" mx="auto" px={8}>
         <Heading mb={4} size="2xl">
           {title}
         </Heading>
@@ -152,8 +152,6 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       },
     };
   } catch (e) {
-    console.log(e);
-
     return {
       notFound: true,
     };
