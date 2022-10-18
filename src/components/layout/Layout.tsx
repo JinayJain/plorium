@@ -9,12 +9,15 @@ type OpenGraphProps = {
   type?: string;
 };
 
+const DESCRIPTION =
+  "Learn anything with the best resources curated by experts, and vetted by people like you.";
+
 function Layout({
   children,
   variant = "default",
   title,
   ogProps = {
-    title: "Roadmap",
+    title: "Plorium",
   },
   ...props
 }: {
@@ -46,7 +49,17 @@ function Layout({
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
+
+        <meta name="description" content={DESCRIPTION} />
+
         <meta property="og:image" content={ogUrl} />
+        <meta property="og:title" content={titleArray.join(" | ")} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://plorium.com" />
+        <meta property="og:description" content={DESCRIPTION} />
+        <meta property="og:site_name" content="Plorium" />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:site" content="@plorium" />
       </Head>
       <Navbar />
       <Box as="main" minH="calc(100vh - 64px)" overflow="auto" py={4}>
