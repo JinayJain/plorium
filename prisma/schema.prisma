@@ -61,6 +61,10 @@ enum ResourceType {
   TUTORIAL
   DOCUMENT
   PAPER
+  BOOK
+  COURSE
+  TOOL
+  OTHER
 }
 
 model ResourceVote {
