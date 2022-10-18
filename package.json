@@ -28,6 +28,7 @@
     "@trpc/next": "^9.27.2",
     "@trpc/react": "^9.27.2",
     "@trpc/server": "^9.27.2",
+    "@vercel/og": "^0.0.19",
     "framer-motion": "^7.2.1",
     "next": "^12.3.0",
     "next-auth": "^4.10.3",

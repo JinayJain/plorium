@@ -37,7 +37,10 @@ function ViewResource({
   };
 
   return (
-    <Layout title={[resource.title, "Resource"]}>
+    <Layout
+      title={[resource.title, "Resource"]}
+      ogProps={{ title: resource.title, type: "resource" }}
+    >
       <Box borderWidth="1px" borderRadius="lg" p={[8, 8, 16]}>
         <Flex>
           <Box flex={1}>
