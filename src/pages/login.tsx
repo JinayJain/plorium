@@ -1,49 +1,38 @@
 import { Button, Center } from "@chakra-ui/react";
-import { GetServerSideProps } from "next";
-import { unstable_getServerSession } from "next-auth";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 import React from "react";
 import { FaGoogle } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 import Layout from "@/components/layout/Layout";
-
-import { authOptions } from "./api/auth/[...nextauth]";
+import { withUnauthed } from "@/util/server/withAuth";
 
 const Login = () => {
+  const router = useRouter();
+  const { callbackUrl } = router.query;
+
   return (
     <Layout title="Login">
       <Center>
         <Button
-          onClick={() => signIn("google")}
-          leftIcon={<FaGoogle />}
-          colorScheme="green"
+          leftIcon={<FcGoogle />}
+          onClick={() =>
+            signIn("google", {
+              callbackUrl: callbackUrl ? String(callbackUrl) : "/",
+            })
+          }
+          variant="outline"
         >
-          Login
+          Sign in with Google
         </Button>
       </Center>
     </Layout>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = await unstable_getServerSession(
-    ctx.req,
-    ctx.res,
-    authOptions,
-  );
-
-  if (session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
-};
+export const getServerSideProps = withUnauthed(() => ({
+  props: {},
+}));
 
 export default Login;

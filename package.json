@@ -12,7 +12,8 @@
     "start": "next start",
     "check-types": "tsc --noEmit",
     "lint": "yarn check-types && next lint",
-    "vercel-build": "prisma generate && prisma migrate deploy && next build"
+    "vercel-build": "prisma generate && prisma migrate deploy && next build",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.9",
@@ -53,6 +54,7 @@
     "eslint": "8.21.0",
     "eslint-config-next": "12.2.4",
     "eslint-config-prettier": "^8.5.0",
+    "husky": "^8.0.0",
     "prettier": "^2.7.1",
     "prisma": "^4.4.0",
     "ts-node": "^10.9.1",

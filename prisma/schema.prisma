@@ -36,6 +36,7 @@ model User {
   subscribedRoadmaps RoadmapLearner[]
   accounts           Account[]
   sessions           Session[]
+  resourceVotes      ResourceVote[]
 }
 
 model Resource {
@@ -51,6 +52,7 @@ model Resource {
 
   author User            @relation(fields: [authorId], references: [id])
   blocks ResourceBlock[]
+  votes  ResourceVote[]
 }
 
 enum ResourceType {
@@ -59,6 +61,23 @@ enum ResourceType {
   TUTORIAL
   DOCUMENT
   PAPER
+  BOOK
+  COURSE
+  TOOL
+  OTHER
+}
+
+model ResourceVote {
+  resourceId Int
+  userId     String
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  resource Resource @relation(fields: [resourceId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+
+  @@id([resourceId, userId])
 }
 
 model Roadmap {
@@ -76,9 +95,10 @@ model Roadmap {
 }
 
 model Block {
-  id        Int @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   roadmapId Int
   order     Int
+  kind      BlockType
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())

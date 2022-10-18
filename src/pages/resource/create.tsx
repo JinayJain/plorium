@@ -27,6 +27,7 @@ import {
   useCreateResourceForm,
 } from "@/util/forms/createResource";
 import useDebounce from "@/util/hooks/useDebounce";
+import { withAuth } from "@/util/server/withAuth";
 import { trpc } from "@/util/trpc";
 
 function CreateResource() {
@@ -158,4 +159,5 @@ function CreateResource() {
   );
 }
 
+export const getServerSideProps = withAuth();
 export default CreateResource;

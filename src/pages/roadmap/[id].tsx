@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Container,
+  Flex,
   Grid,
   GridItem,
   Heading,
@@ -56,7 +57,7 @@ function Roadmap({
 
   return (
     <Layout variant="bare" title={[title, "Roadmap"]}>
-      <Box textAlign="center" mt={16}>
+      <Box textAlign="center" mt={16} maxW="container.xl" mx="auto" px={8}>
         <Heading mb={4} size="2xl">
           {title}
         </Heading>
@@ -83,6 +84,7 @@ function Roadmap({
           {blocks.map((block, index) => (
             <BlockContainer
               key={block.id}
+              hoverable={!!block.resourceBlock}
               label={index + 1}
               isFirst={index === 0}
               isLast={index === blocks.length - 1}
@@ -126,7 +128,15 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
           include: {
             resourceBlock: {
               include: {
-                resource: true,
+                resource: {
+                  include: {
+                    _count: {
+                      select: {
+                        votes: true,
+                      },
+                    },
+                  },
+                },
               },
             },
             noteBlock: true,
@@ -142,8 +152,6 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
       },
     };
   } catch (e) {
-    console.log(e);
-
     return {
       notFound: true,
     };
