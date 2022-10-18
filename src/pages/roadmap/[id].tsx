@@ -18,7 +18,6 @@ import BlockContainer from "@/components/roadmap/BlockContainer";
 import NoteBlock from "@/components/roadmap/NoteBlock";
 import ResourceBlock from "@/components/roadmap/ResourceBlock";
 import pluralize from "@/util/functions/pluralize";
-import roadmapEditorSlice from "@/util/redux/slice/roadmapEditorSlice";
 import { prisma } from "@/util/server/db/prisma";
 import { trpc } from "@/util/trpc";
 import InferNextProps from "@/util/types/InferNextProps";
@@ -56,7 +55,11 @@ function Roadmap({
   };
 
   return (
-    <Layout variant="bare" title={[title, "Roadmap"]}>
+    <Layout
+      variant="bare"
+      title={[title, "Roadmap"]}
+      ogProps={{ title, type: "roadmap" }}
+    >
       <Box textAlign="center" mt={16} maxW="container.xl" mx="auto" px={8}>
         <Heading mb={4} size="2xl">
           {title}
